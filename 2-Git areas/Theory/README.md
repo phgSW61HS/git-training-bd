@@ -4,14 +4,21 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [Version control tool](#Version-control-tool)
-  * [What is version control](#What-is-version-control)
-  * [The well known, Git](#The-well-known,-Git)
-* [Repositories](#Repositories)
-* [Git](#Git)
-  * [Branches in Git](#Branches)
-  * [Environment](#Environment)
-  * [Hands on](#Starting-hands-on)
+* [Description](#Description)
+  * [Yaml details](#yaml-details)
+* [Lifecycle](#lifecycle)
+  * [Pods states](#pods-state)
+  * [Containers states](#container-states)
+  * [Hands on session on Pod vs Containers Lifecycle](#hands-on-session-on-pod-vs-containers-lifecycle)
+* [Resources CPU Memory](#resources-cpu-memory)
+  * [Memory Request vs Limits](#memory-request-vs-limits)
+  * [Resource quota - namespace level](#resource-quota-namespace-level)
+  * [LimitRange - namespace level](#limitRange-namespace level)
+* [Pods Commands](#pods-commands)
+* [Specific pods](#specific-pods)
+  * [Multicontainers Pod](#multicontainers-pod)
+  * [Temporary pods](#temporary-pods)
+* [HANDS_ON](#hands_on)
 
 ## Version control tool
 
@@ -37,12 +44,14 @@ Basically, Git consists of **saving / backing up / versioning a directory**, ori
 The content of this "directory" can consist of many different type of things.
 Most of the time though it consists of source code that can be built (interpreted or compiled) and usually the content of the code is handled through an IDE (Intellij, Visual Studio, Atom, ...) which offers various facilities to manage, run and test code.
 
-## Repositories
+## Git
 
-Before diving more into Git, we thought important to go back to the understanding of what is a repository and how is generally organize a source code.
+#### Branches in Git
 
-@PH to add information here, I propose to not introduce .gitignore here but come back to it at the end of this introduction section :)
+#### Environment in Git
 
-## Git Basics by example
+## Starting with Git
 
-Before 
+lorem ipsum ...
+
+## Basics commands
