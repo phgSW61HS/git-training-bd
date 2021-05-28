@@ -1,57 +1,36 @@
 # Introduction
 
+For all this training, we will discover how the devops fundamentals can help us delivering a high quality project and ease the different release steps.
+During all the training, we will simulate to start a new project where we want to deliver a MVP / POC to our client.
+We don't really care about the language of the project (Python, js, scala, ...). We will focus on how develop it as a team.
+
 ## Section Contents
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [Version control tool](#Version-control-tool)
-  * [What is version control](#What-is-version-control)
-  * [The well known, Git](#The-well-known,-Git)
-* [Repositories](#Repositories)
-* [Git Basics by example](#Git-Basics-by-example)
-  * [Branches in Git](#Branches)
-  * [Environment](#Environment)
-  * [Hands on](#Starting-hands-on)
+* [Git](#Git)
+* [Docker](#Docker)
+* [CI-CD](#CI-CD)
 
-## Version control tool
+## Git
 
-#### What is version control
+Imagine that you were first working alone on your project with all the files on your local machine.
+Yet, a new colleague will join you in order to speed up the process.
 
-Version control, also known as source control, is the practice of tracking and managing changes to software code.
-Version control systems are software tools that help software teams manage changes to source code over time.
+How will you share the files with him, how will you ensure that you have the last version of a file, that you didn't change the same procedures or functions, ...
 
-Some of the key benefices of source control - that we will highlight further - can be summarize below:
-- Prevent code loss
-- Allowing several developpers/teams to work on the same project by keeping track of all changes
-- Ensuring that no developers change the same part of codes without validated them
-- Helping Devops team to automatically test and deploy codes
-- ... many more.
+The Git presentation will highlights the best practices and give a brief introduction of the main features.
 
-#### The well known, Git
+#### Docker
 
-In the Dev community, Git is the version controller that you will encounter in any project.
-Git is a mature, actively maintained open source project originally developed in 2005 by Linus Torvalds, the famous creator of the Linux operating system kernel.
+Now, imagine that a third person join the team while the project has been developed for quite some time. He would need to reinstall all the necessary libraries, languages, etc..
+Depending on the project it can be quite long and fastidious. Imagine in addition that, all the members of the project are working with a different OS (Windows, Linux, Mac...), the version or dependencies are sometimes quite different and you can't be completely sure that something that works for you will work for someone else as well.
+It can be quite time consuming.
 
-Basically, Git consists of **saving / backing up / versioning a directory**, originally stored on a local machine (your machine), on a **remote server**. The server can be any machine on which git "server" is running, even though most of the time you use a cloud provider such as **Github, Gitlab, Bitbucket**,...
+It is where Docker can be your savor ! We'll see it in the Docker section.
 
-The content of this "directory" can consist of many different type of things.
-Most of the time though it consists of source code that can be built (interpreted or compiled) and usually the content of the code is handled through an IDE (Intellij, Visual Studio, Atom, ...) which offers various facilities to manage, run and test code.
+## CI-CD
 
-## Repositories
+Finally, your prototype is finally over and you would like to ensure that any changes will be automatically tested and deployed in order to be sure to not have any regression in the code nor losing any time for deploying.
 
-Before diving more into Git, we thought important to go back to the understanding of what is a repository and how is generally organize a source code.
-
-@PH to add information here, I propose to not introduce .gitignore here but come back to it at the end of this introduction section :)
-
-## Git Basics by example
-
-Before diving into the Git way of working, let's create our first project tracked by git.
-
-- On your local machine, on the home of your user, create a folder we will use along that training for example purposes and let's initiate Git
-Note that the path/command could change depending on your OS. (on Windows, do it with Git Bash)
-> mkdir /home/username/testGit
-> cd /home/username/testGitmkdir /home/username/testGit
-> cd /home/username/testGit
-> git init
-> ls -lart Git
-W git status
+Gitlab CI-CD is one example of how you could do it. 

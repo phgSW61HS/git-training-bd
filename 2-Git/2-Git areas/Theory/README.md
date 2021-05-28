@@ -4,54 +4,41 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [Description](#Description)
-  * [Yaml details](#yaml-details)
-* [Lifecycle](#lifecycle)
-  * [Pods states](#pods-state)
-  * [Containers states](#container-states)
-  * [Hands on session on Pod vs Containers Lifecycle](#hands-on-session-on-pod-vs-containers-lifecycle)
-* [Resources CPU Memory](#resources-cpu-memory)
-  * [Memory Request vs Limits](#memory-request-vs-limits)
-  * [Resource quota - namespace level](#resource-quota-namespace-level)
-  * [LimitRange - namespace level](#limitRange-namespace level)
-* [Pods Commands](#pods-commands)
-* [Specific pods](#specific-pods)
-  * [Multicontainers Pod](#multicontainers-pod)
-  * [Temporary pods](#temporary-pods)
-* [HANDS_ON](#hands_on)
+* [Workspace](#Workspace)
 
-## Version control tool
+## Workspace
 
-#### What is version control
+The workspace is the place were we store our files. Git gives us an idea of what is in our workspace. Basically it is our folder.
+We have different way of modifying the state of our workspace: create, edit or delete an existing file.
 
-Version control, also known as source control, is the practice of tracking and managing changes to software code.
-Version control systems are software tools that help software teams manage changes to source code over time.
+One role of Git is therefore to take track of those modifications between your workplace (your local repository) and the git versionned repo.
+On the previous introduction section, we created a repository and we commited two files (first_file.py and second_file.txt).
+By doing a commit for those two files, we tell Git that the versionned repo should contain those two files with the content that was on it at that time.
 
-Some of the key benefices of source control - that we will highlight further - can be summarize below:
-- Prevent code loss
-- Allowing several developpers/teams to work on the same project by keeping track of all changes
-- Ensuring that no developers change the same part of codes without validated them
-- Helping Devops team to automatically test and deploy codes
-- ... many more.
+Right now, if we edit/delete those two files or create a new file, we don't have the same version between our local repository and what Git commited (the status of the file Git saved).
+Let's do some modification and see for each of them the **git status**
 
-#### The well known, Git
+```
+  cd /home/username/testGit
+  git status
+  echo "first edit" > first_file.py
+  rm second_file.txt
+  echo "test" > third_file.js
+  git status
 
-In the Dev community, Git is the version controller that you will encounter in any project.
-Git is a mature, actively maintained open source project originally developed in 2005 by Linus Torvalds, the famous creator of the Linux operating system kernel.
+```
+![](../pics/status_workspace_0.png)
 
-Basically, Git consists of **saving / backing up / versioning a directory**, originally stored on a local machine (your machine), on a **remote server**. The server can be any machine on which git "server" is running, even though most of the time you use a cloud provider such as **Github, Gitlab, Bitbucket**,...
+Git is pointing out the difference between our local folders and the versioned folder. It is divided into two areas, the changes that need to be staged and the untracked file.
 
-The content of this "directory" can consist of many different type of things.
-Most of the time though it consists of source code that can be built (interpreted or compiled) and usually the content of the code is handled through an IDE (Intellij, Visual Studio, Atom, ...) which offers various facilities to manage, run and test code.
+![](../pics/areas_0.jpg)
 
-## Git
+In a directory, the
 
-#### Branches in Git
+Unmodified: This file is identical in the workspace and in currently checked-out commit in the repository.
 
-#### Environment in Git
+Modified: This file is present in both workspace and repository, but is different.
 
-## Starting with Git
+Staged: This file is in the workspace, current commit, and stage. Note that the file can be different in all three locations.
 
-lorem ipsum ...
-
-## Basics commands
+Untracked: This file is in the workspace, but not in the current commit.

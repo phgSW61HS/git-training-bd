@@ -49,8 +49,49 @@ Before diving into the Git way of working, let's create our first project tracke
 
 - On your local machine, on the home of your user, create a folder we will use along that training for example purposes and let's initiate Git
 Note that the path/command could change depending on your OS. (on Windows, do it with Git Bash)
-> mkdir /home/username/testGit
-> cd /home/username/testGitmkdir /home/username/testGit
-> cd /home/username/testGit
-> git init
-> ls -lart Git
+
+```
+ mkdir /home/username/testGit
+ cd /home/username/testGit
+ git init
+ touch first_file.py
+ ls -a
+```
+
+By doing the previous commands, you should see that a .git folder has been created. You can navigate on it if you want. We will comeback to it later.
+(Note that ls -a allows to visualize the hidden directories which start with a .)
+
+> git status
+
+![](../pics/git_status_0.png)
+
+Probably the git command you will run the most with Git. If at any point you don't know if you did something wrong or if something seems weird in the project. Simply run a ***git status*** command and try to figure it out.
+We can see that git has discovered that we created a new file in red but that this file is untracted, meaning that we didn't tell Git that we would like to "save it in Git".
+let's tell Git that we would like to keep track of that file.
+
+> git add first_file.py
+
+![](../pics/git_add_0.png)
+
+Let's create a second file but we will not add it to the files we want to keep track with Git.
+> touch second_file.txt
+
+> git status
+
+![](../pics/git_status_1.png)
+
+Let's do our first commit of the first_file.py that we created before.
+
+> git commit -m "Generate the first file to commit"
+
+> git status
+
+![](../pics/git_commit_0.png)
+
+We can now add the second file and also commit it.
+
+> git add second_file.txt
+
+> git commit -m "Add the second file"
+
+> git status
