@@ -33,7 +33,7 @@ services:
     - postgresql
     ports:
     - "443:443"
-    - "10080:80"
+    - "8080:80"
     - "10022:22"
     volumes:
     - gitlab-data:/opt/git/data:Z
@@ -65,7 +65,7 @@ services:
     - SSL_SELF_SIGNED=false
 
     - GITLAB_HOST=localhost
-    - GITLAB_PORT=10080
+    - GITLAB_PORT=8080
     - GITLAB_SSH_PORT=10022
     - GITLAB_RELATIVE_URL_ROOT=
     - GITLAB_SECRETS_DB_KEY_BASE=dtjCW7HKxcdMsKzj9zRwNVnrgf44WFdzvKcvJtHrzRKRLhhjLq9ChbRhzmLfnfvX
@@ -167,17 +167,17 @@ services:
     - OAUTH_AZURE_TENANT_ID=
     networks:
     - gitlab
-     
-  gitlab-runner:
-    image: gitlab/gitlab-runner:alpine
-    restart: unless-stopped
-    depends_on:
-    - gitlab
-    volumes:
-    - ./config/gitlab-runner:/etc/gitlab-runner
-    - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-    - gitlab
+
+#  gitlab-runner:
+#    image: gitlab/gitlab-runner:alpine
+#    restart: unless-stopped
+#    depends_on:
+#    - gitlab
+#    volumes:
+#    - ./config/gitlab-runner:/etc/gitlab-runner
+#    - /var/run/docker.sock:/var/run/docker.sock
+#    networks:
+#    - gitlab
 
 networks:
   gitlab:
@@ -185,4 +185,4 @@ volumes:
   redis-data:
   postgresql-data:
   gitlab-data:
-  gitlab-runner-config:
+#  gitlab-runner-config:

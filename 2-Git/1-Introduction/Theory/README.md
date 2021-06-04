@@ -45,17 +45,20 @@ Before diving more into Git, we thought important to go back to the understandin
 
 ## Git Basics by example
 
-Before diving into the Git way of working, let's create our first project tracked by git.
+Before diving into the Git way of working, let's create our first project tracked by git and set-up the gitlab server.
 
-- On your local machine, on the home of your user, create a folder we will use along that training for example purposes and let's initiate Git
+**Go to the [Gitlab server session](0-Gitlab server) and follow the set_up.md.**
+
+- On your local machine, on the home of your user, create a folder we will use along that training for example purposes and let's initiate Git.
 Note that the path/command could change depending on your OS. (on Windows, do it with Git Bash)
 
 ```
  mkdir /home/username/testGit
  cd /home/username/testGit
  git init
+ git remote add origin http://localhost:8080/user1/test.git
  touch first_file.py
- ls -a
+ ls -alrt
 ```
 
 By doing the previous commands, you should see that a .git folder has been created. You can navigate on it if you want. We will comeback to it later.
@@ -73,6 +76,8 @@ let's tell Git that we would like to keep track of that file.
 
 ![](../pics/git_add_0.png)
 
+Then, go to your gitlab server (localhost:8080) and see that no file exists.
+
 Let's create a second file but we will not add it to the files we want to keep track with Git.
 > touch second_file.txt
 
@@ -88,6 +93,10 @@ Let's do our first commit of the first_file.py that we created before.
 
 ![](../pics/git_commit_0.png)
 
+Then, go to your gitlab server (localhost:8080) and see that first_file.py has been pushed to Gitlab.
+
+![](../pics/gitlab_commit_0.png)
+
 We can now add the second file and also commit it.
 
 > git add second_file.txt
@@ -95,3 +104,7 @@ We can now add the second file and also commit it.
 > git commit -m "Add the second file"
 
 > git status
+
+Then, go to your gitlab server (localhost:8080) and see that both files have been pushed to Git with a reference to the commit message we provided.
+
+![](../pics/gitlab_commit_1.png)
