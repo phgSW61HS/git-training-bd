@@ -1,0 +1,13 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+
+test:
+  tags:
+    - macdockeralias
+  script:
+    - npm install
+    - npm run test
+

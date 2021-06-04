@@ -1,0 +1,30 @@
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "docker-shared-runner"
+  url = "http://gitlab:80"
+  token = "df9okVdBrZm1129MiCVc"
+  executor = "docker"
+  builds_dir = "/builds"
+  cache_dir = "/cache"
+  clone_url = "http://gitlab:80"
+  [runners.custom_build_dir]
+    enabled = true
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+  [runners.docker]
+    tls_verify = false
+    image = "maven:3.6.1-jdk-11"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = true
+    volumes = ["gitlab-runner-builds:/builds", "gitlab-runner-cache:/cache"]
+    network_mode = "cicd_gitlab"
+    shm_size = 0
