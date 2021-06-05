@@ -5,6 +5,8 @@
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
 * [Workspace](#Workspace)
+* [Stage area](#Stage area)
+* [Remote area](#Remote area)
 
 ## Workspace
 
@@ -98,4 +100,3 @@ Do not hesitate to open the first_file.py to see that he contains content now on
 
 
 ## SUMMARY
-https://coderefinery.github.io/git-intro/04-staging-area/
