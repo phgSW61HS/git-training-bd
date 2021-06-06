@@ -7,6 +7,7 @@ Here is an example of content sections with titles, subtitles. Important to inte
 * [Workspace](#Workspace)
 * [Stage area](#Stage area)
 * [Remote area](#Remote area)
+* [Summary](#Summary)
 
 ## Workspace
 
@@ -100,3 +101,21 @@ Do not hesitate to open the first_file.py to see that he contains content now on
 
 
 ## SUMMARY
+
+TODO write summary
+
+#### Key commands
+
+```
+git checkout <file_name>     => undo all file changes in your working dir
+git checkout -p              => undo changes by blocks in your working dir
+git reset <file_name>        => undo all file changes staged
+git reset -p                 => undo staged changes by blocks
+git revert <commit_id>       => undo a commit
+git commit --amend           => modify the previous commit
+git reset --hard <commit_id> => go back to an old commit
+```
+
+#### Next sections
+
+You can now go to the next sections: [3-Recovery](3-Recovery)

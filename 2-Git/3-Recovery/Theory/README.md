@@ -5,7 +5,11 @@
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
 * [Introduction](#Introduction)
-  * [Yaml details](#yaml-details)
+* [Uncommitted changes](#Uncommitted changes)
+* [Revert commit](#Revert commit)
+* [Modify commit](#Modify commit)
+* [Rollback to past commit](#Rollback to past commit)
+* [Key commands](#Key commands)
 
 ## Introduction
 
@@ -84,20 +88,47 @@ You can now see the commit history again and see that a new commit has been adde
 
 ## Modify commit
 
+it happens that you forgot to put some files or changes in a commit. It is possible to amend a commit. (in project, be careful if you pushed your branch already)
 
+```
+make some changes in first_file.py
+git add first_file.py
+git commit --amend
+git log
+git status
+cat first_file.py
+```
 
+![](../pics/amend_commit.png)
 
+## Rollback to past commit
 
+In some situation, you'd like to come back to a specific commit.
 
+ > git log --oneline
 
-## Git
+ ![](../pics/reset_log.png)
 
-#### Branches in Git
+ Find a specific commit you would like to come back to and reset your branch, for example the commit that is currently in Gitlab server (origin/master), you can find the id in gitlab server if it's not obvious:
 
-#### Environment in Git
+ > git reset --hard be15594
 
-## Starting with Git
+ ![](../pics/git_reset_hard.png)
 
-lorem ipsum ...
+***Note:*** Like the modification of a commit, pay attention in a project if you already pushed your branch and you want to reset it.
 
-## Basics commands
+## Key commands
+
+```
+git checkout <file_name>     => undo all file changes in your working dir
+git checkout -p              => undo changes by blocks in your working dir
+git reset <file_name>        => undo all file changes staged
+git reset -p                 => undo staged changes by blocks
+git revert <commit_id>       => undo a commit
+git commit --amend           => modify the previous commit
+git reset --hard <commit_id> => go back to an old commit
+```
+
+#### Next sections
+
+You can now go to the next sections: [4-Branching](4-Branching)
