@@ -1,14 +1,7 @@
-TODO expliquer le docker compose dans les grandes lignes uniquelent pour gitlab server dans un premier temps
-ensuite xpliquer les premiers configs à faire pour tester et ouvrir dans browser
-essayer de scripter la création de Users
-tester la créatione repos
-
-
 ## 1. SetUp Of Gitlab server
 
 The actions we are about to take in this sections are specific to this e-learning context.
 Let's go back to the global git schema.
-
 ![](pics/global_git_shcema.png)
 
 In this section I'll explain how to set up a gitlab server on your local machine.
@@ -106,7 +99,7 @@ Remark:
 
 To have launchd start gitlab-runner now and restart at login:
   brew services start gitlab-runner
-Or, if you dont want/need a background service you can just run:
+Or, if you don't want/need a background service you can just run:
   gitlab-runner start
 
 ```
@@ -185,7 +178,7 @@ f227704b0555   sameersbn/postgresql:12-20200524   "/sbin/entrypoint.sh"    2 wee
 5203e9bca26c   redis:5.0.9                        "docker-entrypoint.s…"   2 weeks ago   Up 4 days             6379/tcp                                                                                    gitlab-docker_redis_1
 ```
 
-The I typed the
+The I typed the 
 `docker inspect <containerId>`
 command for each of the container:
 ![](pics/gitlab_docker_inspect.png)
@@ -278,9 +271,9 @@ FATAL: Failed to verify runners
 
 THe job we took as an example was node-converter, a simple node js app running unit test wih hexadecimal convertor.
 Normally this is a "normal" node.js app who is run as process/service on a VM.
-Here we wont to run a ci job that will run unit tests whenever something happens. As descirbed in the .gitlab-ci.yml file of the repository, the build stage will consists of running thos node.js unit tests.
+Here we wont to run a ci job that will run unit tests whenever something happens. As descirbed in the .gitlab-ci.yml file of the repository, the build stage will consists of running thos node.js unit tests. 
 The gitlab-runner we registred was using `docker`as executor for its ci jobs.
-This means that whenever an event occuer on the repo, it tirggers a CI jobs (triggered by gilab CI coordinator, running on gitlab server) runing on docker and responsibles for executing some tasks of the lifecycle of an application (installation, building, testing, packaging, deploying).
+This means that whenever an event occuer on the repo, it tirggers a CI jobs (triggered by gilab CI coordinator, running on gitlab server) runing on docker and responsibles for executing some tasks of the lifecycle of an application (installation, building, testing, packaging, deploying). 
 
 Here is the content of the .gitlab.ci?yml file at the root of the repository and which defines the CI jobs:
 
@@ -302,9 +295,9 @@ test:
 
 You notice the `tags` sub-section included in the `test` section. The `tags`indicates a **List of tags that are used to select a ** `runner.`
 
-The 2 commands of the CI script will be run on Docker, on image `node:latest`. The
-> npm install
-download node.js dependencies and store them in the node_modules directory, that will be `cached`.
+The 2 commands of the CI script will be run on Docker, on image `node:latest`. The 
+> npm install 
+download node.js dependencies and store them in the node_modules directory, that will be `cached`. 
 > npm run test
 will run the unti tests defined in this file:
 
@@ -342,14 +335,14 @@ describe("Color Code Converter", function() {
 
 Here is the failure logs for the first CI job with docker executor runner for node.js project.:
 ![](pics/failure_with_first_config.png)
-
+  
 
 Basically some steps complete, like pulling and firing up container frunning the CI jobs defined for the node converter repo, but it fails when it comes to cloning git reposiory hosted on local gitlab-server.
 We see that it cannot containe to localhost on port 100800.
 
 In order to clarify the situation, we took several actions.
-First we strive to understand the connectivity issues.
-1. First we relize that the cloning of the localhost:10080 hosted repository would never work
+First we strive to understand the connectivity issues. 
+1. First we relize that the cloning of the localhost:10080 hosted repository would never work 
    We connect ssh to each container:
    > docker ps:
    ```yml
@@ -386,13 +379,13 @@ First we strive to understand the connectivity issues.
    ![](pics/modified_configtoml.png)
 
    ![](pics/modified_configtoml_2.png)
-
+   
 
    :warning:The config means Port 110080 of the Host is mapped with port 80 of the container
 
 Here a kind of gros summary
 
-- gitlab-runner server
+- gitlab-runner server 
   - set up as binary/global service on macos
   - runners registered with gitlab CI coordinator (server) as docker executor
   - config.toml modified
@@ -405,12 +398,13 @@ Here a kind of gros summary
 
 So currently we:
 
-1. Achieve the firtst stage for the registration of a gitlab runner server and gitlab server CI thtrough git respositories that need to be cloned build test and deploy. WE do this by registering runner to Job (repos) using variables with relative adressage that passes the first round of validatio.
+1. Achieve the firtst stage for the registration of a gitlab runner server and gitlab server CI thtrough git respositories that need to be cloned build test and deploy. WE do this by registering runner to Job (repos) using variables with relative adressage that passes the first round of validatio. 
 2. Go the `/Users/pgolard/.gitlab-runner/config.toml` and modifies deeper those values. as an example: if your Runner executor is Docker, and if I want to gestiter a new Runner for a repository hosted on the docker container gitlab, I access it through the browser through localhost and port 10080: SO I need to configure the config.toml file to make sur this will be possible.
 3. Nevertheless, Once the Runner is registered, this relative adressage won't work when CI job run on Docker: localhost of the container where the CI job runs doesn't contain the git repo. especially in its localhost. THis means the docker nework and the IP's it attributed should now give the appropriate ip address. We modified trhe config.toml to includ the erference to the local docker networke created, and each docker services became part of this docker network.
 4. Finally, we quickly picked up that once the CI job is running on a runner instance, the perspective becomes docker container. As a result, if I want to interact with a container 's port, I select the container Port, not the port of the container mapped to the host Port.
-5. To enable thos 2 distinct steps completes, the workaround is th specify a "clone_url". This "clone_url" is used onfli if regaler url fails. Or it will fail while run from the container.
+5. To enable thos 2 distinct steps completes, the workaround is th specify a "clone_url". This "clone_url" is used onfli if regaler url fails. Or it will fail while run from the container. 
 
 ## Future setup (docker gitlab & gitlab runner process on docker using only 2 images)
 
 https://www.ivankrizsan.se/2019/06/17/building-in-docker-containers-on-gitlab-ce/
+
