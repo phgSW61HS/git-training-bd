@@ -93,6 +93,8 @@ Let's do our first commit of the first_file.py that we created before.
 
 ![](../pics/git_commit_0.png)
 
+> git push
+
 Then, go to your gitlab server (localhost:8080) and see that first_file.py has been pushed to Gitlab.
 
 ![](../pics/gitlab_commit_0.png)
@@ -105,6 +107,45 @@ We can now add the second file and also commit it.
 
 > git status
 
+> git push
+
 Then, go to your gitlab server (localhost:8080) and see that both files have been pushed to Git with a reference to the commit message we provided.
 
 ![](../pics/gitlab_commit_1.png)
+
+#### Commits
+
+
+By doing a **git add -> git commit**. You tell git to take a snapshot of your directory that is store in the **.git** directory.
+
+
+    Photography analogy: We first focus (git add, we “stage” the change), then shoot (git commit):
+
+
+![](../pics/git_stage_commit.png)
+
+
+By doing a git push, you tell git to send those snapshots to your remote git server (bitbucket, gitlab, gitblit, github, ...).
+
+
+## SUMMARY
+
+-    Initializing a Git repository is simple: git init
+-    Commits should be used to tell a story.
+-    Git uses the .git folder to store the snapshots.
+
+## Key commands
+
+```
+git init                               => initiate git in your folder
+git remote add origin <remote_git_url> => link your git folder with a remote git repository
+git diff                               => see the difference you've made
+git add                                => stage your file
+git commit                             => commit your changes
+git log                                => See your previous commit (id of the commit + messages)
+git push                               => Push to the remote git repository
+```
+
+#### Next sections
+
+You can now go to the next sections: [2-Git areas](2-Git-areas)
