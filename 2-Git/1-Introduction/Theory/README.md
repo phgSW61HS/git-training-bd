@@ -64,6 +64,8 @@ Note that the path/command could change depending on your OS. (on Windows, do it
 By doing the previous commands, you should see that a .git folder has been created. You can navigate on it if you want. We will comeback to it later.
 (Note that ls -a allows to visualize the hidden directories which start with a .)
 
+TODO: Add git config, and explain .init
+
 > git status
 
 ![](../pics/git_status_0.png)

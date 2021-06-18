@@ -117,6 +117,8 @@ In some situation, you'd like to come back to a specific commit.
 
 ***Note:*** Like the modification of a commit, pay attention in a project if you already pushed your branch and you want to reset it.
 
+TODO: Add section about Squash
+
 ## Key commands
 
 ```

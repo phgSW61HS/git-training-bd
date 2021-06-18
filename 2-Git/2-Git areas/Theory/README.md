@@ -99,6 +99,8 @@ You still need to publish it by doing a git push.
 
 Do not hesitate to open the first_file.py to see that he contains content now on gitlab server.
 
+TODO: Explain HEAD and git diff
+
 
 ## SUMMARY
 
