@@ -101,9 +101,44 @@ cat first_file.py
 
 ![](../pics/amend_commit.png)
 
-## Rollback to past commit
+## HEAD
+
+When working with Git, only one branch can be checked out at a time - and this is what's called the "HEAD" branch. Often, this is also referred to as the "active" or "current" branch.
+
+Git makes note of this current branch in a file located inside the Git repository, in .git/HEAD. (This is an internal file, so it should not be manually manipulated!)
+If you wonder what exactly this file contains, you can simply have its contents printed on the command line:
+> cat .git/HEAD
+
+#### Detached HEAD
+
+Let's see the logs of our branch with a new command:
+> git reflog
+
+Let's checkout to a previous commit *(in the example ***a396fbb*** *)*
+
+![](../pics/previous_commit.png)
+
+We are told by git that we **are in 'detached HEAD' state**
+
+This places Git into a state called detached HEAD, which means that HEAD is not currently pointing to a branch latest commit.
+
+There are two ways to return HEAD to a normal state:
+
+- If you want to delete any changes associated with the detached HEAD, you can simply checkout an existing branch (e.g. git checkout master). This will fully revert your repository to that branch's state and set HEAD to point to that branch's head.
+
+- If you want to keep your changes, you can simply create a new branch (e.g. git branch tmp). This will store your changes in the tmp branch and move HEAD to the tip of that branch. After doing that, you can checkout the original branch and merge your new branch into it (e.g. git checkout master followed by git merge tmp).
+
+
+#### Rollback
 
 In some situation, you'd like to come back to a specific commit.
+
+Once you find the commit you want to rollback to, you can revert the full branch state to it using `git checkout <commit ID>`.
+
+This detaches HEAD back to that commit so that you can view that file's old version in context (e.g. to run and test your application).
+
+Alternatively, if you only want to revert that specific file, you can run `git checkout <commit ID> <file>` to restore it.
+
 
  > git log --oneline
 
