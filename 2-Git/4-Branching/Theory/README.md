@@ -74,6 +74,8 @@ We saw that `git checkout` can be used in quite some occasions with git:
 
 Picture git checkout as an operation that brings the working tree to a specific state. The state can be a commit or a branch (pointing to a commit).
 
+TODO add illustrations
+
 ## Merging and graph
 
 Merging a branch into another one is the action of **adding all the commits** (and their changes) into **another branch**.
