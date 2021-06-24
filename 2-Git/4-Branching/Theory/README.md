@@ -120,15 +120,38 @@ git graph
 We see in the Graph example that we can visualize the different commits we made and when the merge.
 
 
-You can see all the branch merged into your current branch with:
+You can see all the branch merged into the current branch with:
 `git branch --merged`
 
 
 ## Conflicts
 
+It's great we saw how we can develop a new functionnality without impacting the current code. **Yet, what happen if two developers while developing their features both make a change to the same file or even to the same functions?**
 
+Git will create what is call a conflict and ask you to solve it. Let's see it via an example:
 
+We will create two branches and delete a file on one of them while modifying that same file in the second branch. Finally we will try to merge them.
+As Git can't know which version is correct or not, it will ask us to decide.
 
+```
+git branch firstChange
+git branch secondChange
+
+git checkout firstChange
+rm file1.sh
+git add .
+git commit -m "Delete file1.sh for creating conflict"
+
+git checkout secondChange
+ls
+echo "some changes for conflicts" >> file1.sh
+git status
+git add .
+git commit -m "Change file1.sh for creating conflict"
+
+git merge firstChange
+git status
+```
 
 
 
