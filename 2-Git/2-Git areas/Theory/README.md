@@ -11,6 +11,8 @@ Here is an example of content sections with titles, subtitles. Important to inte
 
 ## Workspace
 
+
+
 The workspace is the place where we store our different files and Git gives us a state of the modification made within our directory. We have different way of modifying the state of our workspace: create, edit or delete an existing file.
 
 One role of Git is therefore to take track of the modifications between your workplace (your local repository) and what has been versioned, the remote repository.
@@ -21,11 +23,10 @@ Right now, if we edit/delete those two files or create a new file, we don't have
 Let's do some modification and see for each of them the **git status**
 
 ```
-  cd /home/username/testGit
-  git status
-  echo "first edit" > first_file.py
-  rm second_file.txt
-  echo "test" > third_file.js
+  cd /home/username/gitillu
+  touch README.md
+  echo "first edit" > toto.py
+  git init
   git status
 
 ```
@@ -48,6 +49,9 @@ As seen in the above illustration, there are different status for a file in a di
 Let's check the differences between our local changes and the remote repository. All the changes, we made are not reflected to the remote repository yet.
 
 ![](../pics/gitlab_commit_1.png)
+
+
+
 
 ## Stage area
 
