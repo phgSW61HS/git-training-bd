@@ -4,14 +4,17 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [Version control tool](#Version-control-tool)
-  * [What is version control](#What-is-version-control)
-  * [The well known, Git](#The-well-known,-Git)
-* [Repositories](#Repositories)
-* [Git Basics by example](#Git-Basics-by-example)
-  * [Branches in Git](#Branches)
-  * [Environment](#Environment)
-  * [Hands on](#Starting-hands-on)
+* [Introduction](#introduction)
+  * [Section Contents](#section-contents)
+  * [Version control tool](#version-control-tool)
+      * [What is version control](#what-is-version-control)
+      * [The well known, Git](#the-well-known-git)
+  * [Repositories](#repositories)
+  * [Git Basics by example](#git-basics-by-example)
+      * [Commits](#commits)
+  * [SUMMARY](#summary)
+  * [Key commands](#key-commands)
+      * [Next sections](#next-sections)
 
 ## Version control tool
 
@@ -150,4 +153,4 @@ git push                               => Push to the remote git repository
 
 #### Next sections
 
-You can now go to the next sections: [2-Git areas](2-Git-areas)
+You can now go to the next sections: [2-Git areas](../../2-Git%20areas/Theory/README.md))
