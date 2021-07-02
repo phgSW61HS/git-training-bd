@@ -126,6 +126,18 @@ You can see all the branch merged into the current branch with:
 `git branch --merged`
 
 
+## Fast Forward Merge
+
+TODO: add section about ff merge, rebase and fetch
+
+https://stackoverflow.com/questions/34526346/git-pull-asks-me-to-write-merge-message
+
+git pull is basically two actions at once: git fetch followed by a git merge (unless you use git pull --rebase, in which case you can guess what happens).
+
+The reason you're seeing this is because Git can't do a fast-forward merge, like it can most of the time. The reason for that is usually because you've git committed locally to the branch you're trying to pull, and now you need to merge the remote changes with your local ones.
+
+It's also worth noting that Git pre-populated the merge message for you, so you don't really need to type anything. Just save and exit, and the merge should be complete. (Unless, of course, there are merge conflicts).
+
 ## Conflicts
 
 It's great we saw how we can develop a new functionnality without impacting the current code. **Yet, what happen if two developers while developing their features both make a change to the same file or even to the same functions?**
