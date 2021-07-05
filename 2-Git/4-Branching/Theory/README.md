@@ -167,6 +167,33 @@ git merge firstChange
 git status
 ```
 
+![](../pics/conflicts_0.png)
+
+When switching to our second branch as it was created from the master branch, we can see that the file is not deleted and we can make a change into it.
+![](../pics/conflicts_1.png)
+
+In our two branches, we made changes to the same file so if we try to merge our branches how can Git knows which version should be kept. We just created a conflict that we need to solve by **committing** it in order to **complete the merge**.
+
+![](../pics/conflicts_2.png)
+
+
+#### Illustrations
+
+In the example above, we deleted a file in one branch and make a modification in the same file in the other branch before merging them.
+
+What happen if in two different branches, we make some changes to the same lines in a file? How will we fix the conflicts.
+
+ - checkout to the `master` branch, create two branches `firstConflict` and `secondConflict`, on each branch do a modification to the same line of a file and commit it. Finally merge `secondConflict` into `firstConflict`.
+
+
+ **Can you solve the conflicts and successfully merge the two branches ?**
+
+ > Hint: if you open the project in a IDE, it could help, you should select the adequate version.
+
+ ## Rebase
+
+
+
 
 
 TODO:
