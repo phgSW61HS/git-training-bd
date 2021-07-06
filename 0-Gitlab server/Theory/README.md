@@ -114,7 +114,7 @@ We chose docker because
 ```yml
 cd 0-Gitlab\ server
 cd Theory/
-docker-compose -f docker-compose_gs.yml
+docker-compose -f docker-compose_gs.yml up
 ```
 
 Run the command `docker ps`to list the running containers:
@@ -160,23 +160,23 @@ Now let's create a `user`account.
     ![](pics/register_new_user_3.png)
 
 4. At this stage, you need to **approve** the request from the new user you **registered**. Therefore You go back to the browser you have used to configure the `root`account to connect to gitlab. Please click on the **adjustable wrench** to go to the `admin area`and Then clik on `users`. You will then see the list of users (for those already approved), but here you need to click on `pending approval`.
-   
+
    ![](pics/register_new_user_4.png)
 
 5. Click on the user you want to approve, in my case ***Jules Cesar***.
-   
+
    ![](pics/register_new_user_5.png)
 6. Approve the request.
-   
+
    ![](pics/register_new_user_6.png)
 7. You should now see that the request has been successfully approved.
-   
+
    ![](pics/register_new_user_7.png)
 8. At this stage please open up the other browser, the one used to register and connect as user. Type your username and password. You should now manage to authenticate and access to the following page where you'll be asked to choose your role (in our case select Developer) and click on ***Get Started***.
-   
+
    ![](pics/register_new_user_8.png)
 9.  Now You can create or browse project as ***Jules Cesar***.
-    
+
     ![](pics/register_new_user_9.png)
 
 ### 1.5 User Authentication with ssh keys

@@ -2,6 +2,10 @@
 
 At the heart of Git
 
+## Prerequisities
+
+You will need to follow the Gitlab server installation in section 0-Gitlab server/README.md
+
 
 ## 1. Section Contents
 
@@ -9,8 +13,8 @@ Here is an example of content sections with titles, subtitles. Important to inte
 
 * [1. Section Contents](#1-section-contents)
 * [2. Types of VCS](#2-types-of-vcs)
-  * [2.1. 2.1 SVN or CVS as centralized VCS](#21-21-svn-or-cvs-as-centralized-vcs)
-  * [2.2. 2.2 Git as distributed VCS](#22-22-git-as-distributed-vcs)
+  * [2.1. SVN or CVS as centralized VCS](#21-21-svn-or-cvs-as-centralized-vcs)
+  * [2.2. Git as distributed VCS](#22-22-git-as-distributed-vcs)
 * [3. How Git Stores Revisions](#3-how-git-stores-revisions)
 * [4. .git repository structure](#4-git-repository-structure)
   * [4.1. Illustration](#41-illustration)
@@ -39,59 +43,7 @@ Here is an example of content sections with titles, subtitles. Important to inte
 
 
 
-## 2. Types of VCS
 
-An interesting introductory remark about git would be about its `decentralized` character.
-In Version controlling you can have centralized and decentralized VCS. 
-
-### 2.1. 2.1 SVN or CVS as centralized VCS
-
-In a `centralized` VCS, the **database** resides on a **central server** and you `checkout` a **copy from the server**. **Most** of the **commands** **require** you to **contact the central database** and hence **require network access**. 
-
-![](../pics/centralized_vcs.png "Centralized VCS")
-
-
-### 2.2. 2.2 Git as distributed VCS
-
-In a `decentralized` or `distributed` VCS, **each and every node has a copy of the database** and hence you **clone a copy from a remote server**. 
-
-![](../pics/decentralized_vcs.png "Decentralized VCS")
-
-
-Note that the remote server has no special permissions except for the fact that all the nodes have access to the remote server. As a result of this, **most of the commands** on `git` (**except** `git push` or `git pull`) **can** be performed **without network access**.
-
-## 3. How Git Stores Revisions
-
-As we remember from the introduction, in a `Distributed Version Control` system a `local copy` is saved on `each node` (computer of a person who is part of the project). There is **also** a `centralized` `server` where **all the team members push** their changes. This way `Git` is **resilient** to crashes as each node has its own copy of the source tree.
-
-`Git` stores the changes in files **differently** as compared to other `Version Control Systems` like `SVN` and `CVS`. This is one of the important concept of `Git` that you should internalize as early as possible:
-
-> Centralized Version control systems store the difference (delta) between the two versions.
-> 
-> ![](../pics/VCSGitStoringChanges.jpeg "Centralized VCS") 
-
-For example, consider **File A** that got changed three times. The First version of the file will be stored as is, in the sense complete file will be stored. As new versions are introduced only the difference from the previous version will be saved. This will become clearer when we look at the image below, this image shows how over multiple revisions changes are stored for three files.
-Here we can see that other `CVS` ***store the delta (changes)*** to a given file over time. 
-
-`Git`, on the hand, ***stores the Snapshot of the changed file***. 
-For example, if you made a change to **File A**, a **complete snapshot** of the changed file is stored. ***If a file has not changed between two versions, `Git` will keep a reference of the original file instead of copying it again in the new version***. Below image summarizes how Git internally stores the changes.
-
-> `Git`, on the hand, ***stores the Snapshot of the changed file***.
-> 
-> ![](../pics/GitStoringChanges.jpeg "Decentralized VCS") 
-
-To summarize this section, the three important points that we learned about Git are
-
-* `Git` stores a **Snapshot of a file** as **opposed** to **storing a Difference**, which **other Version Control Systems** do.
-* `Git` only takes a `Snapshot` of the `changed` files.
-* To optimize memory, `Git` **keeps** a `Reference` of the file that has not changed instead of making a copy of it in the new version.
-
-
-## 4. .git repository structure
-
-As we have already mentionned, Git is decentralized and therefore every node (laptop, workstation...) has a ful copy of the whole database. There is also a centralized remote server where all team members push their commits.
-
-  ![Figure 1 - Git Areas](../pics/global_git_shcema.png)
 
 ### 4.1. Illustration
 
@@ -107,12 +59,12 @@ For those who have not done it yet, please refer to the following section [Gitla
 
 * deploy the containers needed to run gitlab server on your laptop
 * configure your admin account to access gitlab as `root`and be able to administrate the platform
-* create at least one [User](../../../0-Gitlab%20server/Theory/README.md#14-gitlab-server-user-creation) 
+* create at least one [User](../../../0-Gitlab%20server/Theory/README.md#14-gitlab-server-user-creation)
 
 #### 4.1.2. Build your first repo
 
 1. First we go on our local machine and we create a folder `gitillu`in which we add a README.md file
-  
+
   ```yml
   mkdir gitillu
   cd gitillu
@@ -121,14 +73,14 @@ For those who have not done it yet, please refer to the following section [Gitla
   ```
 
 2. We initialize git in this repository via `git init`and we also configure the user and the email of the developer.
-  
+
   ```yml
   git init
   git config user.name "Jules Cesar"
   git config user.email "cesarj@gmail.com"
   ```
 
-3. Notice now that we have git project with a default branch called `master`and if you run a git status you see 
+3. Notice now that we have git project with a default branch called `master`and if you run a git status you see
 
   ![](../pics/git_status.png)
 
@@ -137,11 +89,11 @@ For those who have not done it yet, please refer to the following section [Gitla
   ![](../pics/git_directory.png)
 
 5. Now we create a blank project on a remote server - gitlab (here it's local on Docker but we consider it as if was remote on gitlab.com for instance)
-  
+
   ![](../pics/create_proj.png)
 
-6. Then we indicate the `remote` repo on our local machine. We specify this remote will be represented by the alias `origin`. 
-  
+6. Then we indicate the `remote` repo on our local machine. We specify this remote will be represented by the alias `origin`.
+
   ![](../pics/create_proj_1.png)
 
   ```yml
@@ -172,7 +124,7 @@ drwxr-xr-x   13 pgolard  staff   416 Jun 27 19:22 .git
 drwxr-xr-x+ 190 pgolard  staff  6080 Jun 27 19:22 ..
 ```
 
-Let's have a closer look at the content of the hidden folder `.git` : 
+Let's have a closer look at the content of the hidden folder `.git` :
 
   ![](../pics/gitdir.png)
 
@@ -211,19 +163,19 @@ The `config` file contains your **project-specific configuration options**
 
 ### 4.6. Git Objects
 
-At the core, `git` is nothing but a `key-value data store`. Git uses `SHA-1` 
-- hash of the **content** (content could either refer a file or commit or directory structure — we’ll get to it soon) as the `key` and 
-- the **content** itself (compressed) acts as the `value`. 
+At the core, `git` is nothing but a `key-value data store`. Git uses `SHA-1`
+- hash of the **content** (content could either refer a file or commit or directory structure — we’ll get to it soon) as the `key` and
+- the **content** itself (compressed) acts as the `value`.
 
 In order to understand more about git objects, let’s walk-through an example.
 Remember the content of the workplace of the new project we have just create `gitillu`:
 
   ![](../pics/projdir.png)
 
-Basically we 
-* created a file called `README.md` 
-* and inserted the text `I love git but I prefer beers`, 
-* we have added to `git index` and 
+Basically we
+* created a file called `README.md`
+* and inserted the text `I love git but I prefer beers`,
+* we have added to `git index` and
 * `committed` with a message.
 
 
@@ -239,7 +191,7 @@ This is how Git stores the content initially — as a single file per piece 
 #### 4.6.1. Git Objet - Commit Object
 
 In order words, if we want to see what the first object, under the **subdirectory** `35`, represents, we should **concatenate** the `subdirectory` name with the `filename` included in the subdirectory:
-> git cat-file -p ***35***4d0d9032f67b801bea5f0acc95ea2c64feac13 
+> git cat-file -p ***35***4d0d9032f67b801bea5f0acc95ea2c64feac13
 
   ![](../pics/obj1_cat.png)
 
@@ -255,7 +207,7 @@ The second folder (here `a1`) is a ***`tree object`***. Git **stores** the `file
 * The first column shows the `unix permissions`
 * the second column is either `blob or tree` depending on whether it is a pointer to a file or another directory
 * the third is the `hash` of the `object` `pointed` to
-* the fourth is the `filename`. 
+* the fourth is the `filename`.
 
 In this case there is ***only one file tracked*** by `git`, `README.md`. As a reminder here the file permission:
 
@@ -293,7 +245,7 @@ drwxr-xr-x   3 pgolard  staff   96 Jun 27 19:20 remotes
 drwxr-xr-x  13 pgolard  staff  416 Jun 28 00:06 ..
 ```
 
-If you add a ***remote and push to it***, `Git` stores the `SHA-1` value you last **pushed** to that **remote branch** for `each branch in the refs/remotes directory`. So You'll see as many paths as remotes branch you've pushed on your remote server. What is finally included in those files is a reference to last Git Object (last push to this remote branch). Here have a look at what is in the file `.git/refs/remotes/origin/master` which matches the name of the last branch (3) we have pushed to on the remote repo. In this file, we find an hashkey (4) is equal to the hashkey of the commit object (5) we found earlier on. HAving a look again at the commit object (6,7), we see the reference made to the tree object(7) 
+If you add a ***remote and push to it***, `Git` stores the `SHA-1` value you last **pushed** to that **remote branch** for `each branch in the refs/remotes directory`. So You'll see as many paths as remotes branch you've pushed on your remote server. What is finally included in those files is a reference to last Git Object (last push to this remote branch). Here have a look at what is in the file `.git/refs/remotes/origin/master` which matches the name of the last branch (3) we have pushed to on the remote repo. In this file, we find an hashkey (4) is equal to the hashkey of the commit object (5) we found earlier on. HAving a look again at the commit object (6,7), we see the reference made to the tree object(7)
 
   ![](../pics/gitrefsremotes.png)
 
@@ -304,7 +256,7 @@ The **heads** directory has a `file for every branch in your repository` contain
 
 <!-- TODO check tag folder
  The tag folder has references to a tag object. A tag object is very much like a commit object — it contains a tagger, a date, a message, and a pointer. The main difference is that a tag object generally points to a commit rather than a tree. It’s like a branch reference, but it never moves — it always points to the same commit but gives it a friendlier name.
-We see THe Conect Object represents the content of the 
+We see THe Conect Object represents the content of the
 -->
 
 
@@ -323,7 +275,7 @@ ref: refs/heads/master
 
 Imagine we modify the README.md file by adding thousands of records. Then we add and commit this change.
 Now let's have a look at your .git/objects directory:
-When you make a change to `README.md` and commit it, this will create **3** more folders. the first one, `16` in our case, will be a `snapshot` of the latest file, and represents a `Content Object` 
+When you make a change to `README.md` and commit it, this will create **3** more folders. the first one, `16` in our case, will be a `snapshot` of the latest file, and represents a `Content Object`
 ![](../pics/content_obj_2.png)
 
 The second one, `2e`, will be a `tree object` for the `folder structure` pointing to the `latest commit`
@@ -507,7 +459,7 @@ Find below a small analogy between **packing boxing for moving out and Git**.
 * `Security`: Git handles your security with cryptographic method SHA-1. The algorithm manages your `versions, files, and directory` securely so that your work is not corrupted.
 * `Branching Model`: Git has a different branching model than the other VCS. Git branching model lets you have multiple local branches which are independent of each other. Having this also enables you to have ***friction-less context switching*** (switch back and forth to new commit, code and back), `role-based code` (a branch that always goes to production, another to testing etc) and disposable experimentation (try something out, if does not work, delete it without any loss of code).
 * `Staging Area`: Git has an intermediate stage called “index” or “staging area” where commits can be formatted and modified before completing the commit.
-* `Distributed`: Git is distributed in nature. Distributed means that the repository or the complete code base is mirrored onto the developer’s system so that he can work on it only. 
+* `Distributed`: Git is distributed in nature. Distributed means that the repository or the complete code base is mirrored onto the developer’s system so that he can work on it only.
 
 ###  Key commands
 
