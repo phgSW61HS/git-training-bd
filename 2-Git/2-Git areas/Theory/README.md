@@ -288,7 +288,7 @@ As we created it empty (*touch first_file.py*), we only see the changes associat
 
 - between branches:
 
-> git diff <branch_1> <branch_2>
+> git diff \<branch_1\> \<branch_2>
 
 - with the staging area:
 
