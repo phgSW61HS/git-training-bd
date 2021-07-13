@@ -12,13 +12,15 @@ Here is an example of content sections with titles, subtitles. Important to inte
 * [Merging and graph](#Merging-And-Graph)
 * [Push](#Push-a-branch)
 * [Conflicts](#Rollback to past commit)
-* [Merge requests](#merge-requests)
 * [More advanced notions](#More-advanced-notions)
   * [stash](#Stash)
-  * [Fast forward merge](#Fast-forward-merge)
+  * [Merge requests](#merge-requests)
   * [fetch and pull](#Fetch-and-pull)
   * [rebase](#Rebase)
-* [Key commands](#Key commands)
+  * [Fast forward merge](#Fast-forward-merge)  (Optional not done yet)
+* [SUMMARY](#SUMMARY)
+  * [Key commands](#Key-commands)
+  * [Next sections](#Next-sections)
 
 
 ## Branches
@@ -211,7 +213,6 @@ What happen if in two different branches, we make some changes to the same lines
 
 
 
-## MERGE REQUEST
 
 
 ## More advanced notions
@@ -321,32 +322,146 @@ The reason you're seeing this is because Git can't do a fast-forward merge, like
 
 It's also worth noting that Git pre-populated the merge message for you, so you don't really need to type anything. Just save and exit, and the merge should be complete. (Unless, of course, there are merge conflicts).
 
-#### Fast forward merged
 
-@PH TODO
+#### MERGE REQUEST
+
+We did some modifications on the branch `secondChange` previously, let's push it to our gitlab server.
+
+> git push origin secondChange
+
+We see that Git tells us that we can create a merge request. What is it exactly ? let's open the link it provides us, in my case it is `http://localhost:8084/newcomers/test-git-areas/-/merge_requests/new?merge_request%5Bsource_branch%5D=secondChange`
+
+![](../pics/push_0.png)
+
+By opening the link as `cesarj`, we are redirected to gitlab server for creating what is called a `merge request`. As a team member, you generally don't want to develop all a feature on your side without other members being implicated on the process. That's why once you finished developing and testing your work, you will request another person to approve your work.
+
+You will first give a title and add a small description to your merge request and ensure that you only added the commit and changes you wanted.
+![](../pics/request_0.png)
+
+![](../pics/request_1.png)
+
+![](../pics/request_2.png)
+
+
+You can then assign the merge request to another user. Here, we will put it under the `root` administrator user in order to not create an additionnal user. But if you want you could create a new user as you did for `cesarj`.
+![](../pics/request_3.png)
+
+We can finally create the merge request. Git will check if there is no conflicts for merging your branch into the destination branch in our case `master`. You can imagine that a colleague make a change to a same file on master you will need to fix the conflicts before being able to submit the merge request.
+
+![](../pics/request_4.png)
+
+We can see now that the merge request is ready. In our case the approval is optional but you can set it up (best practice) to be mandatory before merging.
+![](../pics/request_5.png)
+
+Let's login as the `root` user in another browser or private navigation and check the merge request we've been assigned to.
+![](../pics/request_6.png)
+
+
+As a reviewer, I go to the merge request and check and validate all the changes that were made by `cesarj`. If something seems unclear, i can add a comment that points to a particular part of the code. The reviewer and approver needs to validate the functionnality but also the quality of the code.
+
+![](../pics/request_7.png)
+
+It can then be approved and merged by clicking on the adequate button.
+![](../pics/request_8.png)
+
+As `cesarj`, we didn't merge secondChange locally but by pulling `master`, we will see the changes.
+
+![](../pics/pull_0.png)
 
 #### Fetch and pull
 
-@PH TODO
+It's the perfect occasion to talk a bit about `pull` and `fetch` in Git.
+
+`git fetch`
+
+     It really only downloads new data from a remote repository - but it doesn't integrate any of this new data into your working files.
+     Fetch is great for getting a fresh view on all the things that happened in a remote repository.
+
+     Due to it's "harmless" nature, you can rest assured:
+     fetch will never manipulate, destroy, or screw up anything.
+     This means you can never fetch often enough.
+
+`git pull`
+
+    In contrast, is used with a different goal in mind:
+    to update your current HEAD branch with the latest changes from the remote server.
+
+    This means that pull not only downloads new data;
+    it also directly integrates it into your current working copy files.
+
+It's highly recommended to pull only when your working area is cleaned, meaning without any uncommitted changes. Also by pulling it's possible that you get conflicts. you will need to fix them.
+
 
 #### Rebase
 
-@PH TODO
+When you do a merge, you want to add the changes you've made on a `child branch` to the `parent branch`. But what happens if some changes have been done on the parent branch while you were developing. It could even have an impact on your work on the child branch.
+Therefore, you want to regularly `update your child branch` with the changes that have been made on the `parent one`: it's called `rebase`.
 
+    Git rebase makes it as if you had branched from the newest commit on the parent.
+    Instead of that original commit you were at when you first created your branch.
+    You are changing your branch's base commit, or, "re-basing" your branch.
 
+Let's create a child branch from master named `rebase-section` and do two successive commits on it by modifying two files:
 
+```
+git checkout -b rebase-section
+echo "first change for rebase" >> third_file.js
+git add third_file.js
+git commit -m "Add text for rebase demo"
+echo "second change for rebase" >> first_file.py
+git add first_file.py
+git commit -m "Add second text for rebase demo"
+git status
+git log --oneline
+git graph
+```
+![](../pics/rebase_1.png)
 
-TODO:
+We can see our two new commits and check the graph:
+![](../pics/rebase_0.png)
 
-- create new branch
-- git graph
-=> exo several branches (master, feature_branch)
-- switch branch with uncommited changes (git stash => https://www.atlassian.com/git/tutorials/saving-changes/git-stash)
+![](../pics/rebase_2.png)
 
-- merge request (USER1 DEV 1, user2 REVIEWER)
-- merge request with conflicts
+let's switch to master and create a change on another file. Our rebase-section will no longer be based on the last version of the parent branch (`master` on our case)
 
-- delete branch after merge request
+```
+git checkout master
+echo "Change in master for rebase demo" >> file2.scala
+git add file2.scala
+git commit -m "Add text for rebase demo in master"
+git graph
+```
+
+let's have a look at the new graph:
+We notice that a fork happens between our (HEAD -> master) and (rebase-section) branches.
+
+![](../pics/rebase_3.png)
+
+We need to rebase our rebase-section branch to ensure we have the latest code version of the main branch.
+
+```
+git checkout remote-section
+git rebase master
+git graph
+```
+By doing a `git rebase master`, we tell git to take our `remote-section` branch and all the commits we've done and redo them on top of the master HEAD (last local commit).
+
+![](../pics/rebase_5.png)
+
+When we look at the graph now, we see that despite the two commits of the `rebase-section` have been done after the master commit `Add text for rebase demo in master`, our child branch `rebase-section` has been rebased and is up-to-date with `master`.
+
+![](../pics/rebase_4.png)
+
+Obviously, for the example I ensure that no conflicts will happen but it can obviously occurs. You will have to fix them.
+
+You can never rebase too much, instead the more you wait for rebasing, the most likely you'll get conflicts..
+
+***Interesting documentation:
+https://dev.to/joemsak/git-rebase-explained-and-eventually-illustrated-5hlb***
+
+#### Fast forward merged
+
+@PH TODO optionnal
 
 ## SUMMARY
 
@@ -360,8 +475,13 @@ git config --global alias.<alias_name> "<git command>"  => create an alias for g
 git push <destination> <branch>   => undo staged changes by blocks
 git merge <branch>                => merge a branch into your current git git fetch                         =>
 git pull                          =>
-git rebase                        =>
-git stash                         =>
+git rebase <branch>               =>
+git stash (-u -p)                 => stash your uncommitted changes (-u for untracked files, -p for specifying part of your work)
+git stash list
+git stash pop <stash_ref>         => restore then delete stash
+git stash apply <stash_ref>       => restore and keep stash
+git stash drop <stash_ref>        => drop stash by ref name
+git stash clear                   => drop all stash
 ```
 
 #### Next sections
