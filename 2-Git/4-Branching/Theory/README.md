@@ -5,25 +5,21 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [BRANCH](#Branches)
+* [Branches](#Branches)
   * [Introduction](#Introduction)
   * [Practical](#Practical)
 * [Checkout](#Checkout)
 * [Merging and graph](#Merging-And-Graph)
 * [Push](#Push-a-branch)
-* [Branches-integration](#Branches--integration)
-  * [Fast forward merge](#Fast-forward-merge)
-  * [fetch and pull](#fetch-and-pull)
-  * [rebase](#rebase)
 * [Conflicts](#Rollback to past commit)
 * [Merge requests](#merge-requests)
+* [More advanced notions](#More-advanced-notions)
+  * [stash](#Stash)
+  * [Fast forward merge](#Fast-forward-merge)
+  * [fetch and pull](#Fetch-and-pull)
+  * [rebase](#Rebase)
 * [Key commands](#Key commands)
 
-#### fast forward merge
-
-#### fetch and pull
-
-#### rebase
 
 ## Branches
 
@@ -158,23 +154,6 @@ we can now see both of the branch on gitlat server.
 
 
 
-## Branches integration
-
-TODO: add section about ff merge, rebase and fetch
-
-https://stackoverflow.com/questions/34526346/git-pull-asks-me-to-write-merge-message
-
-git pull is basically two actions at once: git fetch followed by a git merge (unless you use git pull --rebase, in which case you can guess what happens).
-
-The reason you're seeing this is because Git can't do a fast-forward merge, like it can most of the time. The reason for that is usually because you've git committed locally to the branch you're trying to pull, and now you need to merge the remote changes with your local ones.
-
-It's also worth noting that Git pre-populated the merge message for you, so you don't really need to type anything. Just save and exit, and the merge should be complete. (Unless, of course, there are merge conflicts).
-
-#### fast forward merged
-
-#### fetch and pull
-
-#### rebase
 
 
 ## Conflicts
@@ -233,6 +212,128 @@ What happen if in two different branches, we make some changes to the same lines
 
 
 ## MERGE REQUEST
+
+
+## More advanced notions
+
+#### Stash
+
+
+- **Create a stash**
+
+Sometimes you've been working on changes on a branch but you've been asked to deploy quickly a hotfix for a production issue. You can't commit your current work cause it's not tested and not complete.
+You need to `stash` your work.
+
+    Stashing is handy if you need to quickly switch context and work on something else,
+    but you're mid-way through a code change and aren't quite ready to commit.
+
+First let's see what happens when you have unstaged work and you switch from one branch (`secondChange` in the example) to master.
+
+```
+git checkout secondChange
+echo "some changes to stash" >> first_file.py
+git checkout master
+git status
+```
+
+![](../pics/stash_0.png)
+
+As seen your unstagged changes are also moved to master. If we delete them on master by checking them out as seen on the 3-Recovery section, if see that they are no longer available on the branch `secondChange`.
+
+![](../pics/stash_1.png)
+
+We need to stash them, we can see it as a temporary commit to which we can refer afterwards.
+
+```
+echo "some changes to stash" >> first_file.py
+git stash
+git status
+```
+
+![](../pics/stash_00.png)
+
+After stashing, the status of the branch is the one before we did the unstagged changes. We can create a second change and stash it as well but by giving the name we want for better identifying it.
+
+```
+echo "another change to stash" >> third_file.js
+git stash save "second stash for demo"
+```
+![](../pics/stash_save_0.png)
+
+As we now have several stash, we can list them and access one or the other by their name. If not specifying in a stash argument, **by default it will take the latest stash ref**.
+
+![](../pics/stash_list_0.png)
+
+***Note: for stashing untracked file, you need to specify `-u`***
+
+- **access a stash**
+
+You can do a diff on a stash ref.
+
+> git stash show -p
+
+![](../pics/stash_diff_0.png)
+
+> git stash show -p stash@{1}
+
+![](../pics/stash_diff_1.png)
+
+You can then take back your changes by using:
+
+     git stash pop <stash_ref> or default to latest one,
+     this will restore your changes and delete the stash
+
+     git stash apply <stash_ref> or default to latest one,
+     this will restore your changes and keep the ref
+
+Let's try it:
+```
+git stash pop stash@{1}
+git stash apply
+```
+![](../pics/stash_pop_0.png)
+
+By listing the stash, only one remains.
+
+```
+git stash list
+```
+
+![](../pics/stash_list_2.png)
+
+We can also go to a complete different branch and restore the changes of the remaining stash.
+
+Let's commit our current work on secondChange first, then checkout to master and restore the work.
+
+![](../pics/stash_master_0.png)
+
+We can also have a look at the graph and see that it starts to be a bit more complex. We have several branches besides `master` but also our `ref/stash`
+
+![](../pics/graph_stash_0.png)
+
+TODO: add section about ff merge, rebase and fetch
+
+https://stackoverflow.com/questions/34526346/git-pull-asks-me-to-write-merge-message
+
+git pull is basically two actions at once: git fetch followed by a git merge (unless you use git pull --rebase, in which case you can guess what happens).
+
+The reason you're seeing this is because Git can't do a fast-forward merge, like it can most of the time. The reason for that is usually because you've git committed locally to the branch you're trying to pull, and now you need to merge the remote changes with your local ones.
+
+It's also worth noting that Git pre-populated the merge message for you, so you don't really need to type anything. Just save and exit, and the merge should be complete. (Unless, of course, there are merge conflicts).
+
+#### Fast forward merged
+
+@PH TODO
+
+#### Fetch and pull
+
+@PH TODO
+
+#### Rebase
+
+@PH TODO
+
+
 
 
 TODO:
