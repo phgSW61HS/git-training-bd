@@ -5,22 +5,22 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [Branches](#Branches)
-  * [Introduction](#Introduction)
-  * [Practical](#Practical)
-* [Checkout](#Checkout)
-* [Merging and graph](#Merging-And-Graph)
-* [Push](#Push-a-branch)
-* [Conflicts](#Rollback to past commit)
-* [More advanced notions](#More-advanced-notions)
-  * [stash](#Stash)
-  * [Merge requests](#merge-requests)
-  * [fetch and pull](#Fetch-and-pull)
-  * [rebase](#Rebase)
-  * [Fast forward merge](#Fast-forward-merge)  (Optional not done yet)
-* [SUMMARY](#SUMMARY)
-  * [Key commands](#Key-commands)
-  * [Next sections](#Next-sections)
+* [1. Branches](#branches)
+    * [1.1 Introduction](#introduction)
+    * [1.2 Practical](#practical)
+* [2. Checkout](#checkout)
+* [3. Merging and graph](#merging-and-graph)
+* [4. Push](#push-a-branch)
+* [5. Conflicts](#conflicts)
+* [6. More advanced notions](#more-advanced-notions)
+    * [6.1 stash](#stash)
+    * [6.2 Merge requests](#merge-requests)
+    * [6.3 fetch and pull](#fetch-and-pull)
+    * [6.4 rebase](#rebase)
+    * [6.5 Fast forward merge](#fast-forward-merge)  (Optional not done yet)
+* [7. SUMMARY](#summary)
+    * [7.1 Key commands](#key-commands)
+    * [7.2 Next sections](#next-sections)
 
 
 ## Branches

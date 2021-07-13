@@ -4,18 +4,18 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [1. Git areas and file state management](#Git-areas-and-file-state-management)
-  * [1.1 Git WorkFlow](#Git-WorkFlow)
-  * [1.2 States of Files in GIT](#States-of-Files-in-GIT)
-    * [1.2.1 Workspace](#Workspace)
-    * [1.2.2 Stage-area](#Stage-area)
-    * [1.2.3 Remote-area](#Remote-area)
-* [2. More advanced concepts](#More-advanced-concepts)
-  * [2.1 Git ignore](#Git-ignore)
-  * [2.2 Git diff](#Git-diff)
-* [3. Summary](#Summary)
-  * [3.1 Key assets of Git](#Key-assets-of-Git)
-  * [3.2 Key-commands](#Key-commands)
+* [1. Git areas and file state management](#git-areas-and-file-state-management)
+  * [1.1 Git WorkFlow](#git-workFlow)
+  * [1.2 States of Files in GIT](#states-of-files-in-git)
+      * [1.2.1 Workspace](#workspace)
+      * [1.2.2 Stage-area](#stage-area)
+      * [1.2.3 Remote-area](#remote-area)
+* [2. More advanced concepts](#more-advanced-concepts)
+    * [2.1 Git ignore](#git-ignore)
+    * [2.2 Git diff](#git-diff)
+* [3. Summary](#summary)
+    * [3.1 Key assets of Git](#key-assets-of-Git)
+    * [3.2 Key-commands](#key-commands)
 
 ## 1. Git areas and file state management
 

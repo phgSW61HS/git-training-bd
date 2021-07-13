@@ -4,16 +4,16 @@
 
 Here is an example of content sections with titles, subtitles. Important to integrate fully guide hands-on sections.
 
-* [Introduction](#Introduction)
-* [Uncommitted changes](#Uncommitted-changes)
-* [Revert commit](#Revert-commit)
-* [Modify commit](#Modify-commit)
-* [HEAD](#HEAD)
-  * [Detached HEAD](#Detached-HEAD)
-* [Rollback to past commit](#Rollback-to-past-commit)
-* [SUMMARY](#SUMMARY)
-  * [Key commands](#Key-commands)
-  * [Next sections](#Next-sections)
+* [1. Introduction](#introduction)
+* [2. Uncommitted changes](#uncommitted-changes)
+* [3. Revert commit](#revert-commit)
+* [4. Modify commit](#modify-commit)
+* [5. HEAD](#head)
+    * [5.1 Detached HEAD](#detached-head)
+* [6. Rollback to past commit](#rollback-to-past-commit)
+* [7. SUMMARY](#summary)
+  * [7.1 Key commands](#key-commands)
+  * [7.2 Next sections](#next-sections)
 
 ## Introduction
 
