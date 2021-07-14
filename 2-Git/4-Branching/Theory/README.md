@@ -486,4 +486,4 @@ git stash clear                   => drop all stash
 
 #### Next sections
 
-You can now go to the next sections: [4-Branching](4-Branching)
+Congrats for completing the Git sections, you can have a look at the different exercises or move to Docker or learn the basics of CI-CD
