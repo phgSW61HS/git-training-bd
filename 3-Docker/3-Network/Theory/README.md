@@ -29,7 +29,12 @@ to configure networks and containers’ relationship to them.
 
 ##### Bridge and User Defined Bridge
 
-
+https://morioh.com/p/07e61c20c234
+https://docs.docker.com/engine/tutorials/networkingcontainers/
+https://www.oreilly.com/content/what-is-docker-networking/
+https://earthly.dev/blog/docker-networking/
+https://cloudkul.com/blog/understanding-communication-docker-containers/
+https://towardsdatascience.com/docker-networking-919461b7f498
 
 ##### Host
 ##### None
