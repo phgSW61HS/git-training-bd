@@ -1,0 +1,16 @@
+version: '3.6'
+services:
+  msHello:
+    image: pgolard/ms-hello:v4
+    container_name: ms-hello
+    ports:
+            - "7777:7777"
+    environment:
+        - ms-bye-svc=ms-bye
+        - MS_BYE_SVC_SERVICE_HOST=ms-bye
+        - MS_BYE_SVC_SERVICE_PORT=9999
+  msBye:
+    image: pgolard/ms-bye:v4
+    container_name: ms-bye
+    ports:
+            - "9999:9999"

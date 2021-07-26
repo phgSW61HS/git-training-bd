@@ -1,0 +1,14 @@
+version: '3.6'
+services:
+  msHello:
+    build: ./msHello
+    image: ms-hello
+    container_name: ms-hello
+    ports:
+            - "7777:7777"
+  msBye:
+    build: ./msBye
+    image: ms-bye
+    container_name: ms-bye
+    ports:
+            - "9999:9999"
