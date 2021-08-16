@@ -11,7 +11,9 @@ Then we will go through the set up of Gitlab. Gitlab is code collaboration & ver
   * [Pre-requisite](#pre-requisite)
     * [Git](#git)
     * [Docker](#docker)
+    * [WSL2](#WSL2)
     * [Maven](#maven)
+    * [JAVA](#JAVA)
     * [IDE](#ide)
   * [Gitlab Server](#gitlab-server)
     * [1.1 Gitlab Server on Docker](#11-gitlab-server-on-docker)
@@ -50,19 +52,32 @@ sudo apt install docker-ce
 
 On **MacOs**, we advise to use [Docker Desktop](https://docs.docker.com/docker-for-mac/install/#install-and-run-docker-desktop-on-mac). The Docker Desktop installation includes `Docker Engine`, Docker `CLI` client, `Docker Compose`, Notary, `Kubernetes`, and Credential Helper.
 
-On **Windows**, [Docker Desktop](https://docs.docker.com/docker-for-windows/install/) exists as well.
+On **Windows**, [Docker Desktop](https://docs.docker.com/docker-for-windows/install/) exists as well. But we will have to install some other things **before**. You can download the installer and use it after you've completed the [Maven](#maven) part.
+
+### WSL2
+
+(Windows only)
+You have to install [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package). It replace the Hyper-V manager which docker used before to handle Linux containers, WSL 2 is a full Linux kernel built by Microsoft, allowing Linux containers to run natively without emulation.
+If you want more information : https://docs.docker.com/docker-for-windows/wsl/
 
 ### Maven
 
 Maven is a powerful project management tool that is based on POM (project object model). It is used for projects build, dependency and documentation. Primarily Maven is used to build `Java` and `Scala` projects, even though it's language agnostic.
 
-Maven will be used to illustrate some CICD features with Java and Scala projects, this is why it's part of the programs required for this course.
+Maven will be used to illustrate some CI-CD features with Java and Scala projects, this is why it's part of the programs required for this course.
 
 OS  |  Commands
 --|--
 linux (Ubuntu)  |  `sudo apt-get install maven`
 MacOs  |  `sudo brew install maven`
 Windows  |  https://www.javatpoint.com/how-to-install-maven
+
+On windows, we would recommend to place the Maven folder in C:\Program Files as it's the same place you'll find your JAVA JDK folder.
+
+### JAVA
+
+(Windows only)
+You also have to install a [JAVA JDK](https://www.oracle.com/java/technologies/javase-downloads.html) and add it to the PATH as an environment variable(see [Maven](#maven) on windows installation)
 
 ### IDE
 
@@ -111,6 +126,13 @@ We chose docker because
 
 ### 1.2 Deploying Gitlab server on Docker
 
+First start by downloading the project
+
+![](pics/dl_project.png)
+
+Extract the project and then open a Command prompt/Terminal in the `git-master` folder
+
+Type the following commands:
 ```yml
 cd 0-Gitlab\ server
 cd Theory/
