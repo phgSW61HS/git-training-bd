@@ -21,7 +21,61 @@ Then you could pull the image by using the command `docker pull ubuntu`, by defa
 
 You can check now that you have the image locally.
 
-![](../pics/docker_desktop_xenial.png)
+![](../pics/docker_ls.png)
+
+## Manage and clear ressource
+
+Docker takes a conservative approach to cleaning up **unused** objects, such as images, containers, volumes, and networks.
+These objects are generally not removed unless you explicitly ask Docker to do so. This can cause Docker to use extra disk space. For each type of object, Docker provides a prune command. In addition, you can use docker system prune to clean up multiple types of objects at once.
+
+**Volumes:** 
+```
+* List of volumes:
+  docker volume ls
+
+* Remove one volume:
+  docker volume rm <volume-name>
+
+*Remove all volumes:
+  docker volume prune
+```
+
+
+**Containers:** 
+```
+* List of containers:
+  docker ps
+  docker ps -a (display also stopped containers)
+  docker container ls
+  docker container ls -a
+
+* Stops one or more containers:
+  docker container stop <container-id> [<container-id>]
+
+* Remove one or more containers:
+  docker container rm <volume-name> [<container-id>]
+
+*Remove all containers:
+  docker container prune
+```
+**Don't forget that you can't remove or prune a running container, you have to stop it first**
+
+
+**Images:** 
+```
+* List of images:
+  docker image ls
+  docker image ls -a
+
+* Remove one or more images:
+  docker image rm <image-id>
+
+*Remove all images:
+  docker image prune (for images without a TAG)
+  docker image prune -a (for all ununsed images)
+```
+**Don't forget that you can't remove or prune an image that is linked to a container, you have to first delete the container**
+
 
 ## Create and access container
 
@@ -238,7 +292,7 @@ Note that the `ARG` command can be overrided by the `ENV` command.
 
 ##### ENV #####
 
-The `ENV` instruction is close to the the `ARG` instruction but it can be accessed after the build-time. It can also override any variable defined as an `ARG`.
+The `ENV` instruction is close to the the `ARG` instruction but it can only be accessed after the build-time. It can also override any variable defined as an `ARG`.
 It's sometime useful to use both instruction together:
 ```
 ARG VERSION=xenial
@@ -261,12 +315,38 @@ In this case, we pass a value as argument in the build command as an `ARG` and t
 
 In total there are 3 ways to define an `ENV` variable:
 
-1. One by one as we did above or when we run the container with the tag `-e` and the difinition in double quote docker `run -e "env_var_name=another_value"` or by using a `docker-compose.yml` file.
-2. Pass the value from the host which is the same methode as above but without giving a value to the variable. Docker will then fetch the value in the host environlent.
+1. One by one as we did above or when we run the container with the tag `-e` and the definition in double quote docker `run -e "env_var_name=another_value"` or by using a `docker-compose.yml` file.
+2. Pass the value from the host which is the same methode as above but without giving a value to the variable. Docker will then fetch the value in the host environment.
 3. By using an environment file or env_file.
 
 ![](../pics/docker_env_arg_recap.png)
 
+Now we'll try with 2 environment variables and one ARG:
+```
+FROM ubuntu:xenial
+
+COPY /test.txt /tmp/
+
+ARG = 5
+
+ENV TEXT = "Hello World"
+
+ENV VAR = 10
+
+RUN echo $TEXT > /tmp/test.txt
+```
+
+In this case we can't setup ENV values at built-time and we'll let the ARG value as default:
+>docker build -t xenial -f Dockerfile .
+
+We can override one or more variables at when we run our container:
+>docker run -it -e TEXT="Hello Friend" xenial
+
+And finally, in the container you can directly access or display you environemnt values but not the ARG value:
+
+![](../pics/docker_env_var.png)
+
+As you can see, the variable $VAR is displayed as "10", the variable $TEXT has been overidded as expected and diplayed "Hello Friend" and the ARG variable return nothing as they only exist during the build-time.
 
 ##### CMD #####
 
