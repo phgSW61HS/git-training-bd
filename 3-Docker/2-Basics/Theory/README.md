@@ -106,8 +106,8 @@ at line 3 and 4 we have the `RUN` CMD followed by the arguments which will launc
 
 **Before testing each commands, don't forget to remove all containers and images. We'll modify the Dockerfile and we'll have to rebuild the image and containers each time so you'll end up with a lot of them if you don't.**
 ```
-docker container rm &lt;container id&gt;
-docker image rm &lt;image id&gt;
+docker container rm <container id>
+docker image rm <image id>
 ```
 
 ##### FROM #####
@@ -164,7 +164,7 @@ Also if you're using a path, you'll have to escape the `\` character:
 ##### COPY #####
 
 The `COPY` command allows you to copy a file or folder from your local filesystem to your container or the other way around. Note that if you've more than one `FROM` command and if you give alias to them, you can use one of those images as a source too.
-If you copy a file from your local filesystem, the path will start where your `Dockerfile` is:\
+If you copy a file from your local filesystem, the path will start where your `Dockerfile` is:
 ```
 FROM ubuntu:xenial
 
@@ -198,11 +198,12 @@ The `ADD` command can not only use file or directories on your local system but 
 
 ##### ARG #####
 
-The `ARG` instruction defines a variable that users can pass at build-time to the builder with the docker build command using the `--build-arg <varname>=<value>` flag. The `ARG` command is only available at the build-time, meaning that as soon as your image is formed, you can't acces it when you run your container.\
+The `ARG` instruction defines a variable that users can pass at build-time to the builder with the docker build command using the `--build-arg <varname>=<value>` flag. The `ARG` command is only available at the build-time, meaning that as soon as your image is formed, you can't acces it when you run your container.
+
 ![](../pics/docker_arg_env.png)
 
 
-If a user specifies a build argument that was not defined in the `Dockerfile`, the build outputs a warning. You can also setup a default value in the `Dockerfile`.\
+If a user specifies a build argument that was not defined in the `Dockerfile`, the build outputs a warning. You can also setup a default value in the `Dockerfile`.
 ```
 ARG VERSION=xenial
 FROM ubuntu:xenial
@@ -222,6 +223,7 @@ docker exec -it 83e bash
 cat /tmp/test.txt
 ```
 ![](../pics/docker_arg_cat.png)
+
 **Note that you can type docker run -it xenial instead of using docker exec as it'll open the bash directly
 
 As you can see above, we've used a default message "Hello World" to the `ARG MSG`. Now we'll do the same but we'll pass another message as an argument when we build the image:
@@ -374,25 +376,31 @@ Now that you've seen how a volume work, wee'll show you how you can in the same 
 docker build -t xenial .
 docker run -v C:\Training\Shared:/tmp/ xenial
 ```
-*On Windows* you should see this message appear:\
+*On Windows* you should see this message appear:
+
 ![](../pics/docker_vol_share.png)
 
 You shoul have the bash still opened as we have used the tags -it:
+
 ![](../pics/docker_vol_run.png)
 
 Now create a file and fill it with a simple phrase by typing in the console:
 >touch /tmp/test.txt && echo "Hello World" > /tmp/test.txt
 
-On your local folder at the path you gave, you should now have an test.txt file:\
+On your local folder at the path you gave, you should now have an test.txt file:
+
 ![](../pics/docker_vol_world.png)
 
-As well as on your container:\
+As well as on your container:
+
 ![](../pics/docker_vol_world2.png)
 
-On your host machine add to the text file the phrase "Hello Friend" and save it :\
+On your host machine add to the text file the phrase "Hello Friend" and save it :
+
 ![](../pics/docker_vol_friend.png)
 
-You can see the modification applied to the file in your container:\
+You can see the modification applied to the file in your container:
+
 ![](../pics/docker_vol_friend.png) 
 
 
