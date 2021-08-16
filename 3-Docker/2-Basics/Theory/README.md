@@ -202,8 +202,118 @@ In total there are 3 ways to define an `ENV` variable:
 
 ##### CMD #####
 
+The `CMD` instruction defines the default behavior/executable of a Docker image. You can put more than one `CMD` in your Dockerfile but docker will ignore all of them except the last one. You can run an image as the base of a container without adding command-line arguments. In that case, the container runs the process specified by the CMD command. 
+
+![](../pics/docker_cmd_cat.png)
+
+As it has become an executable, as soon as the task is done, the containers stops.
+
+![](../pics/docker_cmd_con.png)
+
+If you add an argument when running, the CMD is overrrided.
+
+![](../pics/docker_cmd_host.png)
 
 ##### ENTRYPOINT #####
+
+The `ENTRYPOINT` command is the other instruction used to configure how the container will run. Just like with CMD, you need to specify a command and parameters.
+What is the difference between `CMD` and `ENTRYPOINT`? You cannot override the `ENTRYPOINT` instruction by adding command-line parameters to the docker run command. By opting for this instruction, you imply that the container is specifically built for such use.
+
+We will test it with a new file that we create with a RUN:
+```
+ARG VERSION=xenial
+FROM ubuntu:$VERSION
+
+COPY /test.txt /tmp/
+
+ARG MSG="Hello World"
+
+ENV TEXT = $MSG
+
+RUN echo $TEXT > /tmp/test.txt
+
+RUN touch /tmp/test2.txt && \
+    echo "Well Done" > /tmp/test2.txt
+
+ENTRYPOINT ["cat", "/tmp/test.txt"]
+```
+
+If we build the image and run it without argument we'll have:
+>docker run xenial
+![](../pics/docker_entry_run.png)
+
+Now to see that we can't override the command by passing an argument, we'll us the path to the new test file we created:
+>docker run xenial /tmp/test2.txt
+![](../pics/docker_entry_run2.png)
+
+We can see that the cat test1.txt has been executed and after we get a cat test2.txt
+
+
+## Volumes
+
+Data generated on you container is not persistent. That can be an issue if your container is used to store some data or if you simply want to save some information generated. In order to solve this issue, you can use Docker `Volumes`.
+`Volumes` are folder or files saved on the host machine. They can be linked to one or more container allowing you to keep the data even after you've deleted a container but also to share that data between your containers and/or your host machine.
+
+You can start by simply creating a volume:
+```
+docker volume create volume-test
+docker volume ls
+docker volume inspect volume-test
+```
+![](../pics/docker_vol_crea.png)
+
+After you've build your image you can create a container and link it with the volume with the -v parameter:
+>docker run -v &lt;volume-name&gt;:&lt;/path/container/&gt; xenial
+```
+docker build -t xenial .
+docker run -v volume-test:/tmp/ xenial
+```
+The container and the volume are now linked. You can create a file and exit the container:
+```
+docker run -it -v volume-test:/tmp/ xenial
+touch /tmp/test.txt
+ls /tmp/
+exit
+```
+![](../pics/docker_vol_test.png)
+
+Rerun the image again with the same parameter, it'll create a new container linked to the same volume:
+```
+docker run -it -v volume-test:/tmp/ xenial
+ls /tmp/
+exit
+```
+![](../pics/docker_vol_test2.png)
+
+As you can see above, the test.txt file is already there and the container id is different, proof that the data does not depend on any container(you can delete the first container before running the second one to be sure).
+>docker container rm &lt;container id&gt;
+
+Now that you've seen how a volume work, wee'll show you how you can in the same way use you host machine as the volume:
+>docker run -v &lt;path\to\Host&gt;:&lt;/path/container&gt; xenial
+```
+docker build -t xenial .
+docker run -v C:\Training\Shared:/tmp/ xenial
+```
+*On Windows* you should see this message appear
+![](../pics/docker_vol_share.png)
+
+You shoul have the bash still opened as we have used the tags -it:
+![](../pics/docker_vol_run.png)
+
+Now create a file and fill it with a simple phrase by typing in the console:
+>touch /tmp/test.txt && echo "Hello World" > /tmp/test.txt
+
+On your local folder at the path you gave, you should now have an test.txt file:
+![](../pics/docker_vol_world.png)
+As well as on your container:
+![](../pics/docker_vol_world2.png)
+
+On your host machine add to the text file the phrase "Hello Friend" and save it :
+![](../pics/docker_vol_friend.png)
+As well as on your container:
+![](../pics/docker_vol_friend.png)
+
+Sharing files or folders between containers or the host is simple but there is much more things you can look into. 
 
 
 ## Docker Hub
