@@ -96,13 +96,19 @@ Docker can build images automatically by reading the instructions from a Dockerf
 
 ![](../pics/docker_custom_nano.png)
 
-A `Dockerfile` is a set of commands followed by their arguments with sometimes a few comments. The instructions in a Dockerfile are run in order. A Dockerfile must begin with a `FROM` instruction. This may be after parser directives, comments, and globally scoped `ARGs`(arguments command). The `FROM` instruction specifies the Parent Image from which you are building. FROM may only be preceded by one or more `ARG` instructions, which declare arguments that are used in FROM lines in the Dockerfile.
+A `Dockerfile` is a set of commands followed by their arguments with sometimes a few comments. The instructions in a Dockerfile are run in order. A Dockerfile must begin with a `FROM` instruction. This may be after parser directives, comments, and globally scoped `ARGs`(arguments command). The `FROM` instruction specifies the Parent Image from which you are building. `FROM` may only be preceded by one or more `ARG` instructions, which declare arguments that are used in the `FROM` line in the Dockerfile.
 
 In the custom_nano file at line 1 we have the `FROM` command followed with the parent image ubuntu:xenial which is the argument.
 at line 3 and 4 we have the `RUN` CMD followed by the arguments which will launch the OS update and then the installation of `nano`.
 
 ## Docker Commands
 
+
+**Before testing each commands, don't forget to remove all containers and images. We'll modify the Dockerfile and we'll have to rebuild the image and containers each time so you'll end up with a lot of them if you don't.**
+```
+docker container rm &lt;container id&gt;
+docker image rm &lt;image id&gt;
+```
 
 ##### FROM #####
 
@@ -113,10 +119,21 @@ Note that you can have more than one `FROM` per Dockerfile to create images or t
 ![](../pics/docker_two_from.png)
 
 You can also set an `ARG` before to use it's value:
+```
+ARG VERSION=latest
+FROM alpine:$VERSION
+```
 
->ARG VERSION=latest\
->FROM alpine:$VERSION
+Create a file name `Dockerfile` in an empty folder(mine is at "C:\Training\Docker" for ease of acces later) and fill it with those lines:
+```
+FROM ubuntu:xenial
 
+RUN apt-get update &&\
+    apt-get install nano
+```
+
+To build an image using the Dockerfile use the tag -f:
+>docker build -t xenial -f Dockerfile .     
 
 ##### RUN #####
 
@@ -129,29 +146,46 @@ The `RUN` command, as most of the others commands, has more than one form. The f
 >RUN &lt;command&gt;
 
 The second form is the **Exec**:
->RUN ["executable", "param1", "param2"]\
->RUN ["/bin/bash", "-c", "echo hello"]
+```
+RUN ["executable", "param1", "param2"]
+RUN ["/bin/bash", "-c", "echo hello"]
+```
 
-Note that in the **Exec** form you can simply pass a variable to any executable.This won't work:
+Note that in the **Exec** form you can't simply pass a variable to any executable.This won't work:
 >RUN [ "echo", "$HOME" ]
 
 You have to use a shell.
 >RUN [ "sh", "-c", "echo $HOME" ]
 
 Also if you're using a path, you'll have to escape the `\` character:
->RUN ["c:\\windows\\system32\\tasklist.exe"]
+>RUN ["c:\\\windows\\\system32\\\tasklist.exe"]
 
 
 ##### COPY #####
 
 The `COPY` command allows you to copy a file or folder from your local filesystem to your container or the other way around. Note that if you've more than one `FROM` command and if you give alias to them, you can use one of those images as a source too.
-If you copy a file from your local filesystem, the path will start where your `Dockerfile` is.
+If you copy a file from your local filesystem, the path will start where your `Dockerfile` is:\
+```
+FROM ubuntu:xenial
+
+COPY /test.txt /tmp/
+```
 ![](../pics/docker_copy_file.png)
 
 As you can see in the example above, the test.txt file is in the same folder as my `Dockerfile` the copy command takes the source followed by the path in the xenial container( `/tmp/`).
+
+```
+docker build -t xenial -f Dockerfile .     
+docker run -it xenial
+ls /tmp/
+```
+![](../pics/docker_copy_file2.png)
+
 Note that you can copy more than one file if you use Go's [filepath.Match](https://pkg.go.dev/path/filepath#Match) rules:
->COPY test?.txt\
->COPY test*
+```
+COPY test?.txt
+COPY test*
+```
 
 The first copy above will copy any "test" text file followed by any single character. The second one will copy any file whose name start with "test".
 
@@ -164,12 +198,31 @@ The `ADD` command can not only use file or directories on your local system but 
 
 ##### ARG #####
 
-The `ARG` instruction defines a variable that users can pass at build-time to the builder with the docker build command using the `--build-arg <varname>=<value>` flag. The `ARG` command is only available at the build-time, meaning that as soon as your image is formed, you can't acces it when you run your container. 
+The `ARG` instruction defines a variable that users can pass at build-time to the builder with the docker build command using the `--build-arg <varname>=<value>` flag. The `ARG` command is only available at the build-time, meaning that as soon as your image is formed, you can't acces it when you run your container.\
 ![](../pics/docker_arg_env.png)
 
 
-If a user specifies a build argument that was not defined in the `Dockerfile`, the build outputs a warning. You can also setup a default value in the `Dockerfile`.
+If a user specifies a build argument that was not defined in the `Dockerfile`, the build outputs a warning. You can also setup a default value in the `Dockerfile`.\
+```
+ARG VERSION=xenial
+FROM ubuntu:xenial
+
+COPY /test.txt /tmp/
+
+ARG MSG="Hello World"
+
+RUN echo $MSG > /tmp/test.txt
+```
+
+Save it and in the terminal type:
+```
+docker build -t xenial -f Dockerfile .
+docker run -id xenial
+docker exec -it 83e bash
+cat /tmp/test.txt
+```
 ![](../pics/docker_arg_cat.png)
+**Note that you can type docker run -it xenial instead of using docker exec as it'll open the bash directly
 
 As you can see above, we've used a default message "Hello World" to the `ARG MSG`. Now we'll do the same but we'll pass another message as an argument when we build the image:
 >docker build -t xenial --build-arg MSG="Hello Friend" -f ./Dockerfile .
@@ -185,6 +238,18 @@ Note that the `ARG` command can be overrided by the `ENV` command.
 
 The `ENV` instruction is close to the the `ARG` instruction but it can be accessed after the build-time. It can also override any variable defined as an `ARG`.
 It's sometime useful to use both instruction together:
+```
+ARG VERSION=xenial
+FROM ubuntu:xenial
+
+COPY /test.txt /tmp/
+
+ARG MSG
+
+ENV TEXT = $MSG
+
+RUN echo $TEXT > /tmp/test.txt
+```
 
 >docker build -t xenial --build-arg MSG="Hello Friend" -f ./Dockerfile . 
 
@@ -193,9 +258,10 @@ It's sometime useful to use both instruction together:
 In this case, we pass a value as argument in the build command as an `ARG` and then we give that value to the `ENV` as we cannot define an `ENV` in the build command. This way you can define dynamics `ENV` variables available to your containers
 
 In total there are 3 ways to define an `ENV` variable:
-1.One by one as we did above or when we run the container with the tag `-e` and the difinition in double quote docker `run -e "env_var_name=another_value"` or by using a `docker-compose.yml` file.
-2.Pass the value from the host which is the same methode as above but without giving a value to the variable. Docker will then fetch the value in the host environlent.
-3.By using an environment file or env_file.
+
+1. One by one as we did above or when we run the container with the tag `-e` and the difinition in double quote docker `run -e "env_var_name=another_value"` or by using a `docker-compose.yml` file.
+2. Pass the value from the host which is the same methode as above but without giving a value to the variable. Docker will then fetch the value in the host environlent.
+3. By using an environment file or env_file.
 
 ![](../pics/docker_env_arg_recap.png)
 
@@ -203,12 +269,21 @@ In total there are 3 ways to define an `ENV` variable:
 ##### CMD #####
 
 The `CMD` instruction defines the default behavior/executable of a Docker image. You can put more than one `CMD` in your Dockerfile but docker will ignore all of them except the last one. You can run an image as the base of a container without adding command-line arguments. In that case, the container runs the process specified by the CMD command. 
+```
+ARG VERSION=xenial
+FROM ubuntu:xenial
 
+COPY /test.txt /tmp/
+
+ARG MSG
+
+ENV TEXT = $MSG
+
+RUN echo $TEXT > /tmp/test.txt
+
+CMD ["cat", "/tmp/test.txt"]
+```
 ![](../pics/docker_cmd_cat.png)
-
-As it has become an executable, as soon as the task is done, the containers stops.
-
-![](../pics/docker_cmd_con.png)
 
 If you add an argument when running, the CMD is overrrided.
 
@@ -240,10 +315,12 @@ ENTRYPOINT ["cat", "/tmp/test.txt"]
 
 If we build the image and run it without argument we'll have:
 >docker run xenial
+
 ![](../pics/docker_entry_run.png)
 
 Now to see that we can't override the command by passing an argument, we'll us the path to the new test file we created:
 >docker run xenial /tmp/test2.txt
+
 ![](../pics/docker_entry_run2.png)
 
 We can see that the cat test1.txt has been executed and after we get a cat test2.txt
@@ -264,10 +341,12 @@ docker volume inspect volume-test
 
 After you've build your image you can create a container and link it with the volume with the -v parameter:
 >docker run -v &lt;volume-name&gt;:&lt;/path/container/&gt; xenial
+
 ```
 docker build -t xenial .
 docker run -v volume-test:/tmp/ xenial
 ```
+
 The container and the volume are now linked. You can create a file and exit the container:
 ```
 docker run -it -v volume-test:/tmp/ xenial
@@ -290,11 +369,12 @@ As you can see above, the test.txt file is already there and the container id is
 
 Now that you've seen how a volume work, wee'll show you how you can in the same way use you host machine as the volume:
 >docker run -v &lt;path\to\Host&gt;:&lt;/path/container&gt; xenial
+
 ```
 docker build -t xenial .
 docker run -v C:\Training\Shared:/tmp/ xenial
 ```
-*On Windows* you should see this message appear
+*On Windows* you should see this message appear:\
 ![](../pics/docker_vol_share.png)
 
 You shoul have the bash still opened as we have used the tags -it:
@@ -303,17 +383,17 @@ You shoul have the bash still opened as we have used the tags -it:
 Now create a file and fill it with a simple phrase by typing in the console:
 >touch /tmp/test.txt && echo "Hello World" > /tmp/test.txt
 
-On your local folder at the path you gave, you should now have an test.txt file:
+On your local folder at the path you gave, you should now have an test.txt file:\
 ![](../pics/docker_vol_world.png)
-As well as on your container:
+
+As well as on your container:\
 ![](../pics/docker_vol_world2.png)
 
-On your host machine add to the text file the phrase "Hello Friend" and save it :
-![](../pics/docker_vol_friend.png)
-As well as on your container:
+On your host machine add to the text file the phrase "Hello Friend" and save it :\
 ![](../pics/docker_vol_friend.png)
 
-Sharing files or folders between containers or the host is simple but there is much more things you can look into. 
+You can see the modification applied to the file in your container:\
+![](../pics/docker_vol_friend.png) 
 
 
 ## Docker Hub
