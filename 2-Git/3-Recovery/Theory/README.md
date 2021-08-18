@@ -208,4 +208,4 @@ git reset --hard <commit_id> => go back to an old commit
 
 #### Next sections
 
-You can now go to the next sections: [4-Branching](4-Branching)
+You can now go to the next sections: [4-Branching](../../4-Branching/Theory/README.md)
