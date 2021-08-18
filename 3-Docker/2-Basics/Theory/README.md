@@ -3,11 +3,41 @@
 In this section we're going to talk about Containerized Applications in general and introduce Docker
 
 - [Docker basics by example](#docker-basics-by-example)
+  - [Docker pull](#docker-pull)
+  - [Create and access container](#Create-and-access-container)
+  - [Custom image by example](#Custom-image-by-example)
+  - [Dockerfile](#Dockerfile)
+    - [Dockerfile Commands](#Dockerfile-Commands)
+      - [FROM](#FROM)
+      - [RUN](#RUN)
+      - [COPY](#COPY)
+      - [ADD](#ADD)
+      - [ARG](#ARG)
+      - [CMD](#CMD)
+      - [ENTRYPOINT](#ENTRYPOINT)
+  - [Volumes](#Volumes)
+  - [Manage and clear ressource](#Manage-and-clear-ressource)
+    - [images](#images)
+    - [containers](#containers)
+    - [volumes](#volumes)
 
   - [Hands-on docker commands](#hands-on-docker-commands)
     - [Build custom base node.js image](#build-custom-base-nodejs-image)
     - [Build images for our 2 dummy Micro services - illustrations](#build-images-for-our-2-dummy-micro-services---illustrations)
 
+## Docker containers immutability
+
+One of the most interesting properties of Docker containers is their immutability and the **resulting statelessness** of containers.
+
+As we described in the previous section, a Docker image, once created, does not change.
+A running container derived from the image has a **writable layer** that can **temporarily store runtime changes**.
+***If the container is committed prior to deletion*** with docker commit, the changes in the writable layer will be saved into a new image that is distinct from the previous one.
+Why is immutability good? Immutable images and containers lead to an immutable infrastructure, and an **immutable infrastructure** has many interesting benefits that are not achievable with traditional systems. These benefits include the following:
+
+- **Version control**: By requiring explicit commits that generate new images, Docker forces you to do version control. You can keep track of successive versions of an image; rolling back to a previous image (therefore to a previous system component) is entirely possible, as previous images are kept and never modified.
+- **Cleaner updates and more manageable state changes**. With immutable infrastructure, you no longer have to upgrade your server infrastructure, which means no need to change configuration files, no software updates, no operating system upgrades, and so on. When changes are needed, you simply make new containers and push them out to replace the old ones. This is a much more discrete and manageable method for state change.
+
+**Let's now dive a bit more into Docker.**
 
 ## Docker pull
 
@@ -23,63 +53,11 @@ You can check now that you have the image locally.
 
 ![](../pics/docker_ls.png)
 
-## Manage and clear ressource
-
-Docker takes a conservative approach to cleaning up **unused** objects, such as images, containers, volumes, and networks.
-These objects are generally not removed unless you explicitly ask Docker to do so. This can cause Docker to use extra disk space. For each type of object, Docker provides a prune command. In addition, you can use docker system prune to clean up multiple types of objects at once.
-
-**Volumes:** 
-```
-* List of volumes:
-  docker volume ls
-
-* Remove one volume:
-  docker volume rm <volume-name>
-
-*Remove all volumes:
-  docker volume prune
-```
-
-
-**Containers:** 
-```
-* List of containers:
-  docker ps
-  docker ps -a (display also stopped containers)
-  docker container ls
-  docker container ls -a
-
-* Stops one or more containers:
-  docker container stop <container-id> [<container-id>]
-
-* Remove one or more containers:
-  docker container rm <volume-name> [<container-id>]
-
-*Remove all containers:
-  docker container prune
-```
-**Don't forget that you can't remove or prune a running container, you have to stop it first**
-
-
-**Images:** 
-```
-* List of images:
-  docker image ls
-  docker image ls -a
-
-* Remove one or more images:
-  docker image rm <image-id>
-
-*Remove all images:
-  docker image prune (for images without a TAG)
-  docker image prune -a (for all ununsed images)
-```
-**Don't forget that you can't remove or prune an image that is linked to a container, you have to first delete the container**
 
 
 ## Create and access container
 
-Generally we don't do a `docker pull` and we directly make run our application
+Generally we don't do a `docker pull` and we directly make run our application. If docker does not find the image locally, it will download it first.
 
 > docker run -id ubuntu:xenial
 
@@ -102,6 +80,8 @@ We just created our first container and we can access it directly as if you were
 
 Those files have been created inside your container but does not exist in your file system (You can check in your /tmp folder if you don't believe me).
 
+What does docker do in the background ?
+
 1. If you do not have the ubuntu image locally, Docker pulls it from your configured registry, as though you had run docker pull ubuntu manually
 2. Docker creates a new container, as though you had run a docker container create command manually.
 3. Docker allocates a read-write filesystem to the container, as its final **container layer** - which is the only **writable layer**. This allows a running container to create or modify files and directories in its local filesystem.
@@ -109,7 +89,7 @@ Those files have been created inside your container but does not exist in your f
 5. Docker starts the container and executes /bin/bash. Because the container is running interactively and attached to your terminal (due to the -i and -t flags), you can provide input using your keyboard while the output is logged to your terminal.
 6. When you type exit to terminate the /bin/bash command, the container stops but is not removed. You can start it again or remove it.
 
-## Custom image
+## Custom image by example
 
 As you seen in the previous section `nano` is not installed by default on ubuntu:xenial and we needed to do a `touch` for creating a file.
 
@@ -122,21 +102,21 @@ We can install `nano` by enter the container using `bash` and run the following 
 
 Yet, imagine your container is a python app running on linux for which you need to install a lot of libraries. You don't want to re-install them manually every time.
 
-In the illustrations folder of that section, you will find a customNano file. open it and look at its content;
+In the illustrations folder of that section, you will find a customNano file. Open it and look at its content.
 
-Finally :
+Let's try to build that custom image custom_nano:
 
-> docker build -t custom_nano -f /home/gassogba/Documents/training/git/3-Docker/2-Basics/Illustrations/customNano .
+> docker build -t custom_nano -f <path_to_git_folder>/git/3-Docker/2-Basics/Illustrations/customNano .
 
-**Note**: Obliouvsly you have to type the path to the file in your computer after `-f`
+**Note**: Obviously, you have to type the path to the file in your computer after `-f`
 
 ![](../pics/docker_nano_2.png)
 
 ![](../pics/docker_nano_1.png)
 
-The image is now available in our local repository with the name `custom_nano`.
+The image is now available in our local repository with the name `custom_nano` that we gave after '-t' (for tags).
 
-Let's run it and verify that's `nano` is correctly installed:
+Let's now run that image and verify that's `nano` is correctly installed:
 
 > docker run -id custom_nano
 
@@ -155,7 +135,7 @@ A `Dockerfile` is a set of commands followed by their arguments with sometimes a
 In the custom_nano file at line 1 we have the `FROM` command followed with the parent image ubuntu:xenial which is the argument.
 at line 3 and 4 we have the `RUN` CMD followed by the arguments which will launch the OS update and then the installation of `nano`.
 
-## Docker Commands
+### Dockerfile Commands
 
 
 **Before testing each commands, don't forget to remove all containers and images. We'll modify the Dockerfile and we'll have to rebuild the image and containers each time so you'll end up with a lot of them if you don't.**
@@ -166,7 +146,7 @@ docker image rm <image id>
 
 ##### FROM #####
 
-As we've said before the command `FROM` is the first command of a dockerfile(aside from a few exceptions). It initialise a new build stage and sets the base image. The image can be a local one or you can pull it from the [Public Repositories](https://hub.docker.com/).
+As we've said before the command `FROM` is the first command of a dockerfile(aside from a few exceptions). It initialize a new build stage and sets the base image. The image can be a local one (as we built previously `custom_nano`) or you can pull it from a container registry such as the docker [Public Repositories](https://hub.docker.com/).
 
 Note that you can have more than one `FROM` per Dockerfile to create images or to use one build stage as a dependency for another. You can also set an alias for each in order to refer to them with some commands like another `FROM` or a `COPY` .
 
@@ -178,7 +158,7 @@ ARG VERSION=latest
 FROM alpine:$VERSION
 ```
 
-Create a file name `Dockerfile` in an empty folder(mine is at "C:\Training\Docker" for ease of acces later) and fill it with those lines:
+Create a file name `Dockerfile` in an empty folder(mine is at "C:\Training\Docker" for ease of access later) and fill it with those lines:
 ```
 FROM ubuntu:xenial
 
@@ -187,11 +167,11 @@ RUN apt-get update &&\
 ```
 
 To build an image using the Dockerfile use the tag -f:
->docker build -t xenial -f Dockerfile .     
+>docker build -t xenial -f <path_to_your_dockerfile>/Dockerfile .     
 
 ##### RUN #####
 
-The `RUN` instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile and it allow us to recreate an image from any point of the history as in git. 
+The `RUN` instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile and it allow us to recreate an image from any point of the history as in git.
 If you don't want to create a new layer for each of the `RUN` you can us the `\` character to use continue you instruction to a new line.
 
 ![](../pics/docker_run_back.png)
@@ -246,7 +226,7 @@ The first copy above will copy any "test" text file followed by any single chara
 
 ##### ADD #####
 
-The `ADD` command is close to the `COPY` command but it has a broader scope. As an good practice, if you only require to copy a file or directery, use the `COPY` command.
+The `ADD` command is close to the `COPY` command but it has a broader scope. As an good practice, if you only require to copy a file or directory, use the `COPY` command.
 The `ADD` command can not only use file or directories on your local system but it can also use URLs as a source. `ADD` also has the fonction of extracting **localy** recognized compressed files (.tar,.gzip,.bzip2 or xz). When it does detect one such file, it'll unpack it as a folder at the destination. Note that if you use a URL to a compressed file, it'll only copy it and not decompress it.
 
 
@@ -307,7 +287,7 @@ ENV TEXT = $MSG
 RUN echo $TEXT > /tmp/test.txt
 ```
 
->docker build -t xenial --build-arg MSG="Hello Friend" -f ./Dockerfile . 
+>docker build -t xenial --build-arg MSG="Hello Friend" -f ./Dockerfile .
 
 ![](../pics/docker_env_arg.png)
 
@@ -350,7 +330,7 @@ As you can see, the variable $VAR is displayed as "10", the variable $TEXT has b
 
 ##### CMD #####
 
-The `CMD` instruction defines the default behavior/executable of a Docker image. You can put more than one `CMD` in your Dockerfile but docker will ignore all of them except the last one. You can run an image as the base of a container without adding command-line arguments. In that case, the container runs the process specified by the CMD command. 
+The `CMD` instruction defines the default behavior/executable of a Docker image. You can put more than one `CMD` in your Dockerfile but docker will ignore all of them except the last one. You can run an image as the base of a container without adding command-line arguments. In that case, the container runs the process specified by the CMD command.
 ```
 ARG VERSION=xenial
 FROM ubuntu:xenial
@@ -449,7 +429,7 @@ exit
 As you can see above, the test.txt file is already there and the container id is different, proof that the data does not depend on any container(you can delete the first container before running the second one to be sure).
 >docker container rm &lt;container id&gt;
 
-Now that you've seen how a volume work, wee'll show you how you can in the same way use you host machine as the volume:
+Now that you've seen how a volume work, we'll show you how you can in the same way use you host machine as the volume:
 >docker run -v &lt;path\to\Host&gt;:&lt;/path/container&gt; xenial
 
 ```
@@ -481,10 +461,70 @@ On your host machine add to the text file the phrase "Hello Friend" and save it 
 
 You can see the modification applied to the file in your container:
 
-![](../pics/docker_vol_friend.png) 
+![](../pics/docker_vol_friend.png)
 
 
-## Docker Hub
+
+
+
+## Manage and clear ressource
+
+Docker takes a conservative approach to cleaning up **unused** objects, such as images, containers, volumes, and networks.
+These objects are generally not removed unless you explicitly ask Docker to do so. This can cause Docker to use extra disk space. For each type of object, Docker provides a prune command. In addition, you can use docker system prune to clean up multiple types of objects at once.
+
+
+**Images:**
+```
+* List of images:
+  docker image ls
+  docker image ls -a
+
+* Remove one or more images:
+  docker image rm <image-id>
+
+*Remove all images:
+  docker image prune (for images without a TAG)
+  docker image prune -a (for all ununsed images)
+```
+
+**Don't forget that you can't remove or prune an image that is linked to a container, you have to first delete the container**
+
+
+**Containers:**
+```
+* List of containers:
+  docker ps
+  docker ps -a (display also stopped containers)
+  docker container ls
+  docker container ls -a
+
+* Stops one or more containers:
+  docker container stop <container-id> [<container-id>]
+
+* Remove one or more containers:
+  docker container rm <volume-name> [<container-id>]
+
+*Remove all containers:
+  docker container prune
+```
+**Don't forget that you can't remove or prune a running container, you have to stop it first**
+
+**Volumes:**
+```
+* List of volumes:
+  docker volume ls
+
+* Remove one volume:
+  docker volume rm <volume-name>
+
+*Remove all volumes:
+  docker volume prune
+```
+
+
+## Hands-on docker commands
+
+### Docker Hub
 
 We just succeeded to create our private image. Yet, it is only accessible from our local repository. You might want to share it with your colleagues.
 
@@ -492,29 +532,8 @@ Let's first create our docker registry.
 
 Go to `hub.docker.com`and create an account. (For the remaining of the section you might see my username `assogbg`, replace by your's in that case).
 
-
-
-
-## Docker containers immutability
-
-One of the most interesting properties of Docker containers is their immutability and the **resulting statelessness** of containers.
-
-As we described in the previous section, a Docker image, once created, does not change.
-A running container derived from the image has a **writable layer** that can **temporarily store runtime changes**.
-***If the container is committed prior to deletion*** with docker commit, the changes in the writable layer will be saved into a new image that is distinct from the previous one.
-Why is immutability good? Immutable images and containers lead to an immutable infrastructure, and an **immutable infrastructure** has many interesting benefits that are not achievable with traditional systems. These benefits include the following:
-
-- Version control: By requiring explicit commits that generate new images, Docker forces you to do version control. You can keep track of successive versions of an image; rolling back to a previous image (therefore to a previous system component) is entirely possible, as previous images are kept and never modified.
-- Cleaner updates and more manageable state changes. With immutable infrastructure, you no longer have to upgrade your server infrastructure, which means no need to change configuration files, no software updates, no operating system upgrades, and so on. When changes are needed, you simply make new containers and push them out to replace the old ones. This is a much more discrete and manageable method for state change.
-
-## Hands-on docker commands
-
-first of all let's configure nour remote registry and authenticate to access it from docker client:
-
+You can now login into your docker hub account.
 > docker login
-
-
-Personnally it points to my bpersonal docker hub.
 
 ### Build custom base node.js image
 
