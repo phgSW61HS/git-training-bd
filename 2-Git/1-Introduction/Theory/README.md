@@ -110,7 +110,7 @@ To summarize this section, the three important points that we learned about Git 
 
 #### 4.1. Pre Requisites
 
-At section Zero we saw how to deploy gitlab server locally though Dockr. We  also saw how to create users and authenticate via ssh.
+At section Zero we saw how to deploy gitlab server locally though Docker. We also saw how to create users and authenticate via ssh.
 For the sake of this exercise, we will create a project remotely and bind it to our local repository.
 
 For those who have not done it yet, please refer to the following section [Gitlab Server Setup](../../../0-Gitlab%20server/Theory/README.md#11-gitlab-server-on-docker) and
@@ -138,6 +138,7 @@ For those who have not done it yet, please refer to the following section [Gitla
   git config user.name "Jules Cesar"
   git config user.email "cesarj@gmail.com"
   ```
+  Note that this configuration is only for that project, you can add the `--global` parameter after `git config` to make it your default profile for all projects. If you create other projects you can again define a "local" config as we do here.
 
 3. Notice now that we have git project with a default branch called `master`and if you run a git status you see
 
@@ -148,6 +149,7 @@ For those who have not done it yet, please refer to the following section [Gitla
   ![](../pics/git_directory_1.png)
 
 5. Now we create a blank project on a remote server - gitlab (here it's local on Docker but we consider it as if was remote on gitlab.com for instance)
+In order to change the project URL as in the picture below, you'll have to click on `create a group` but you can only do so with an admin account. In this case, it's the root account or you can upgrade the regular user account to an admin account.
 
   ![](../pics/create_proj.png)
 
@@ -374,7 +376,7 @@ let's tell Git that we would like to keep track of that file.
 
 ![](../pics/status_0.png)
 
-Then, go to your gitlab server (localhost:8080) and see that no file exists.
+Then, go to your gitlab server (localhost:8084) and see that no file exists.
 
 Let's create a second file but we will not add it to the files we want to keep track with Git.
 > touch second_file.txt
@@ -394,7 +396,7 @@ git push
 ![](../pics/commit_0.png)
 
 
-Then, go to your gitlab server (localhost:8080) and see that first_file.py has been pushed to Gitlab.
+Then, go to your gitlab server (localhost:8084) and see that first_file.py has been pushed to Gitlab.
 
 ![](../pics/gitlab_0.png)
 
@@ -408,7 +410,7 @@ We can now add the second file and also commit it.
 
 > git push
 
-Then, go to your gitlab server (localhost:8080) and see that both files have been pushed to Git with a reference to the commit message we provided.
+Then, go to your gitlab server (localhost:8084) and see that both files have been pushed to Git with a reference to the commit message we provided.
 
 ![](../pics/commit_1.png)
 

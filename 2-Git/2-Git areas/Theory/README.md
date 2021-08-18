@@ -353,4 +353,4 @@ git reset --hard <commit_id> => go back to an old commit
 
 #### Next sections
 
-You can now go to the next sections: [3-Recovery](3-Recovery)
+You can now go to the next sections: [3-Recovery](../../3-Recovery/Theory/README.md)
