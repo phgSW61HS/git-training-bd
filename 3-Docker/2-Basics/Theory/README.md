@@ -3,10 +3,27 @@
 In this section we're going to talk about Containerized Applications in general and introduce Docker
 
 - [Docker basics by example](#docker-basics-by-example)
-
+  - [Docker pull](#docker-pull)
+  - [Create and access container](#Create-and-access-container)
+  - [Custom image by example](#Custom-image-by-example)
+  - [Dockerfile](#Dockerfile)
+    - [Dockerfile Commands](#Dockerfile-Commands)
+      - [FROM](#from)
+      - [RUN](#run)
+      - [COPY](#copy)
+      - [ADD](#add)
+      - [ARG](#arg)
+      - [CMD](#cmd)
+      - [ENTRYPOINT](#entrypoint)
+  - [Volumes](#Volumes)
+  - [Manage and clear ressource](#manage-and-clear-ressource)
+    - [images](#images)
+    - [containers](#containers)
+    - [volumes](#volumes)
   - [Hands-on docker commands](#hands-on-docker-commands)
+    - [Docker hub](#docker-hub)
     - [Build custom base node.js image](#build-custom-base-nodejs-image)
-    - [Build images for our 2 dummy Micro services - illustrations](#build-images-for-our-2-dummy-micro-services---illustrations)
+
 
 
 ## Docker pull
@@ -141,8 +158,8 @@ CMD [ "node"]
 We now want to build a new customer image:
 
 ```yaml
-docker build --tag pgolard/node-utils:v1 - < docker-images/node-utils/Dockerfile
-docker push pgolard/node-utils:v1
+docker build --tag <yourDockerHubUsername>/node-utils:v1 - < <pathToDirectory>/git/3-Docker/2-Basics/Illustrations/nodeUtils_Dockerfile
+docker push <yourDockerHubUsername>/node-utils:v1
 ```
 We notice that we end with 10 (1 + 9) layers:
 
@@ -160,27 +177,16 @@ d5c847b5cd3f: Pull complete
 98b00e0a6a07: Pull complete
 ```
 
-then and uploads it on docker hub
+then, uploads it on docker hub
 
 ```yaml
-docker push pgolard/node-utils:v1
+docker push <yourDockerHubUsername/node-utils:v1
 ```
 
+Go to your Docker Hub, and see that your image is now loaded there.
 
-### Build images for our 2 dummy Micro services - illustrations
+Delete all the apt-get install except the nano one and create a second version of your image node-utils:v2, push it to your docker hub.
 
-(**[msHello](docker-images/node-app/svc-section/node-app/msHello)**)
-(**[msBye](docker-images/node-app/svc-section/node-app/msBye)**)
+Those images are accessible by everyone if your account is set to public. Try to pull the image of one of your colleagues or if you're on your own simply try to pull my image:
 
-Those 2 micro services consists of dockerizzd simple node.js applications.
-We first build and upload them to our docker hub.
-We repeay tyhe operartion 3 times; for every new build, we make a small modif. in source code and we increment the tag.
-```yaml
-./docker-images/build.sh 1
-./docker-images/build.sh 2
-./docker-images/build.sh 3
-```
-
-try to run one of our micro service:
-> docker run -it -p 7777:7777 --name ms-hello pgolard/ms-hello:v3
-> curl 0.0.0.0:7777 - This is the hello world from ms hello - V3%
+    assogbg:node-utils:v2
