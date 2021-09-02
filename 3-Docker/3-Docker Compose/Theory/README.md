@@ -81,6 +81,7 @@ services:
 ```
 
 To reach a container from the host, the ports must be exposed through the ports keyword, which also allows us to choose if exposing the port differently in the host as we did for the Gitlab image in section `0-Gitlab server`:
+
 ![](../pics/docker_comp_port.png)
 
 To reach the gitlab page we then connect to `http://localhost:8084`, 8084 being the port made available on the second line under port in the image above
