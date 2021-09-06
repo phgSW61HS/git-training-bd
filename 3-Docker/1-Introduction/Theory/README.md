@@ -2,25 +2,29 @@
 
 In this section we're going to talk about Containerized Applications in general and introduce Docker
 
-- [Docker basics](#docker-basics)
-  - [From Monolithic to microservices](#From-Monolithic-to-microservices)
-    - [Monolithic applications](#Monolithic-applications)
-    - [Microservices](#Microservices)
-  - [Native Running vs Containerized Applications](#native-running-vs-containerized-applications)
-  - [Containerization vs Virtualization](#containerization-vs-virtualization)
-  - [Docker Features](#docker-features)
-  - [Docker architecture](#docker-architecture)
-    - [Docker daemon](#docker-daemon)
-    - [Docker client](#docker-client)
-    - [Docker registries](#docker-registries)
-    - [Docker objects](#docker-objects)
-      - [IMAGES](#images)
-      - [CONTAINERS](#containers)
-  - [Docker Container orchestration](#docker-container-orchestration)
-    - [Docker-compose](#docker-compose)
-    - [Docker-swarm](#docker-swarm)
-    - [Kubernetes](#Kubernetes)
-    - [Limitations](#limitations)
+* [Docker introduction](#docker-introduction)
+  * [From Monolithic to microservices](#from-monolithic-to-microservices)
+      * [Monolithic applications](#monolithic-applications)
+      * [Microservices](#microservices)
+      * [Containerized Microservices](#containerized-microservices)
+  * [Native Running vs Containerized Applications](#native-running-vs-containerized-applications)
+  * [Containerization vs Virtualization](#containerization-vs-virtualization)
+  * [Docker Features](#docker-features)
+  * [Docker architecture](#docker-architecture)
+    * [Docker daemon](#docker-daemon)
+      * [namespaces](#namespaces)
+      * [cgroups( control groups )](#cgroups-control-groups-)
+      * [UnionFS( Union file systems )](#unionfs-union-file-systems-)
+    * [Docker client](#docker-client)
+    * [Docker objects](#docker-objects)
+      * [IMAGES](#images)
+      * [CONTAINERS](#containers)
+    * [Docker registries](#docker-registries)
+  * [Docker Container orchestration](#docker-container-orchestration)
+      * [Docker-compose](#docker-compose)
+      * [Docker-swarm](#docker-swarm)
+      * [Kubernetes](#kubernetes)
+      * [Limitations](#limitations)
 
 ## From Monolithic to microservices
 
@@ -132,20 +136,46 @@ Docker uses a client-server architecture. The Docker client talks to the Docker 
 
 your Docker containers.
 
-![](../pics/architecture.svg)
-
+![](../pics/intro_netwk.png)
 
 ### Docker daemon
 
 The Docker daemon (`dockerd`) is a thin layer between the containers and the Linux kernel.
+The docker server/daemon runs `containers` within `as processes`, acting as a virtual bridge to the host operating system. Although containers are `isolated` processes, they all `share the Kernel of the linux host` between them. Because all of the containers share the services of a single operating system kernel, they use fewer resources than virtual machines.
+
 The Docker daemon is the persistent **runtime environment** that **manages** docker objects such as:
-* dpocker containers
+
+* docker containers
 * docker images
 * networks
 * volumes
 
 As long as docker daemon is setup on a host, **any docker container** can run on **any server** regardless the operating system.
 The docker daemon delivers the promise of ***“develop once, run anywhere.”***
+
+Docker uses the `resource isolation` features of the Linux kernel (such as `cgroups` and kernel `namespaces`) and a `union-capable file system` (such as `OverlayFS`) to allow containers to run within a single Linux instance, avoiding the overhead of starting and maintaining virtual machines.
+
+![](../pics/cgroups-docker.jpeg)
+
+Docker Engine combines the `namespaces`, `cgroups`, and `UnionFS` into a wrapper called a `container format`. The default container format is `libcontainer`.
+#### namespaces
+
+Docker uses `namespaces` to provide `isolated` `workspace` called `containers`. 
+When a container is run, docker creates a set of namespaces for it, providing a layer of isolation. 
+Each aspect of a container runs in a separate namespace and its access is limited to that namespace.
+
+#### cgroups( control groups )
+
+`croups` are used to `limit and isolate the resource usage`( CPU, memory, Disk I/O, network etc ) of a `collection of processes`. 
+cgroups allow Docker engine to share the available hardware resources to containers and optionally `enforce limit and constraints`.
+
+#### UnionFS( Union file systems )
+
+File systems that operate by `creating layers`, making them very `lightweight` and fast.
+
+
+
+Docker Engine uses some Linux kernel features 
 
 ### Docker client
 The Docker client (`docker`) is the primary way that many Docker users interact with Docker. When you use commands such as `docker run`, the client sends these commands to `dockerd`, which carries them out. The docker command uses the Docker API.
