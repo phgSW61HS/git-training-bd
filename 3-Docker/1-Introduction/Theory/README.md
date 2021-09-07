@@ -163,6 +163,7 @@ Docker Engine combines the `namespaces`, `cgroups`, and `UnionFS` into a wrapper
 Docker uses `namespaces` to provide `isolated` `workspace` called `containers`. 
 When a container is run, docker creates a set of namespaces for it, providing a layer of isolation. 
 Each aspect of a container runs in a separate namespace and its access is limited to that namespace.
+Using namespaces make possible to isolates an application's view of the operating environment, including process trees, network, user IDs and mounted file systems. Concretely, on the same OS, application in different namespaces can have process trees completely isolated and independent from each other. Processes cannot then kill other processes that belongs to other process trees.
 
 #### cgroups( control groups )
 
