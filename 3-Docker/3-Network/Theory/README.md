@@ -185,7 +185,14 @@ User defined Bridges offer some interesting functionnalities like the automatic 
 > docker exec -it nodeutils_default_bridge bash
 > root@0cc2a938790f:/# curl nginx_my_bridge
 
-## Exposing Container 
+## Port Binding 
+
+Docker containers can connect to the outside world without any configuration. That’s great because we don’t have to change anything we have programmed before.
+But the outside world cannot connect to a Docker container by default.
+Ah, I see. So it’s not the other way around. How should you connect to your Docker container then? Well, there are multiple options to do so. Let’s explore them.
+
+https://betterprogramming.pub/how-does-docker-port-binding-work-b089f23ca4c8
+
 
 Short answer:
 EXPOSE is a way of documenting
