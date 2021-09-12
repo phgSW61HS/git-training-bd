@@ -187,66 +187,142 @@ User defined Bridges offer some interesting functionnalities like the automatic 
 
 ## Port Binding 
 
-Docker containers can connect to the outside world without any configuration. That’s great because we don’t have to change anything we have programmed before.
-But the outside world cannot connect to a Docker container by default.
+Docker containers ***can connect to the outside world without any configuration***. That’s great because we don’t have to change anything we have programmed before.
+But the ***outside world cannot connect to a Docker container by default***.
 Ah, I see. So it’s not the other way around. How should you connect to your Docker container then? Well, there are multiple options to do so. Let’s explore them.
 
-https://betterprogramming.pub/how-does-docker-port-binding-work-b089f23ca4c8
+#### Docker expose
 
+`EXPOSE` is a way of `documenting` and is related to `Dockerfiles` ( documenting )
 
-Short answer:
-EXPOSE is a way of documenting
---publish (or -p) is a way of mapping a host port to a running container port
-Notice below that:
+In Docker networking, there are two different mechanisms that directly involve network ports: exposing and publishing ports. This applies to the default bridge network and user-defined `bridge` networks.
+
+You expose ports using the `EXPOSE` keyword in the `Dockerfile` or the `--expose` flag to `docker run`. Exposing ports is a way of documenting which ports are used, but ***does not actually map or open any ports***. Exposing ports is optional.
+
+#### Publish
+
+While `EXPOSE` is a way of `documenting`
+`--publish` (or -p) is a way of `mapping` a `host port` to a running `container port`
 
 EXPOSE is related to Dockerfiles ( documenting )
---publish is related to docker run ... ( execution / run-time )
-Exposing and publishing ports
-In Docker networking, there are two different mechanisms that directly involve network ports: exposing and publishing ports. This applies to the default bridge network and user-defined bridge networks.
+--publish is related to `docker run` ... ( execution / run-time )
 
-You expose ports using the EXPOSE keyword in the Dockerfile or the --expose flag to docker run. Exposing ports is a way of documenting which ports are used, but does not actually map or open any ports. Exposing ports is optional.
-
-You publish ports using the --publish or --publish-all flag to docker run. This tells Docker which ports to open on the container’s network interface. When a port is published, it is mapped to an available high-order port (higher than 30000) on the host machine, unless you specify the port to map to on the host machine at runtime. You cannot specify the port to map to on the host machine when you build the image (in the Dockerfile), because there is no way to guarantee that the port will be available on the host machine where you run the image.
-
-from: Docker container networking
-
-Update October 2019: the above piece of text is no longer in the docs but an archived version is here: docs.docker.com/v17.09/engine/userguide/networking/#exposing-and-publishing-ports
-
-Maybe the current documentation is the below:
-
-Published ports
-By default, when you create a container, it does not publish any of its ports to the outside world. To make a port available to services outside of Docker, or to Docker containers which are not connected to the container's network, use the --publish or -p flag. This creates a firewall rule which maps a container port to a port on the Docker host.
-
-and can be found here: docs.docker.com/config/containers/container-networking/#published-ports
-
-Also,
-
-EXPOSE
-...The EXPOSE instruction does not actually publish the port. It functions as a type of documentation between the person who builds the image and the person who runs the container, about which ports are intended to be published.
-
-from: Dockerfile reference
-https://docs.docker.com/engine/tutorials/networkingcontainers/
-https://docs.docker.com/engine/tutorials/networkingcontainers/
-
-TODO:
-- embedded dns: https://towardsdatascience.com/docker-networking-919461b7f498
-- port mapping: https://www.learnitguide.net/2018/09/understanding-docker-port-mapping.html
-- another port mapping: https://tecadmin.net/tutorial/docker/docker-manage-ports/
-- another port mapping again: https://betterprogramming.pub/how-does-docker-port-binding-work-b089f23ca4c8
-- illustration about benefits of user defined bridge VS default bridge with ms-hello & ms-hello bye in "docker run" default, vs dovker run user def vs docker-compose
-- illustrations with port mapping
+You publish ports using the --publish or --publish-all flag to docker run. This tells Docker which `ports to open` on the `container’s network interface`. When a `port` is `published`, it is `mapped` to an `available high-order port` (higher than 30000) on the `host machine`, ***unless you specify the port to map to on the host machine at runtime***. You cannot specify the port to map to on the host machine when you build the image (in the Dockerfile), because there is no way to guarantee that the port will be available on the host machine where you run the image.
 
 
+***By default***, when you create a container, it ***does not publish*** any of its ports to the outside world. To make a port available to services outside of Docker, or to Docker containers which are not connected to the container's network, use the --publish or -p flag. This creates a `firewall` `rule` which `maps` a `container` `port` to a `port` on the `Docker` `host`.
+
+#### Publish all ports 
+
+> docker container run -P -d nginx
+
+The `-P` command `opens every port` the `container` `exposes`. Docker identifies every port the Dockerfile exposes and the ones that are exposed with the Docker container build --expose parameter. Every exposed port is bound directly on a “random” port of the host machine.
+
+Finding the mapped high port
+
+> docker container port <containerId>
+
+This will give the host port (high port) mapped to the container ports published.
+For instance:
+
+```bash
+➜  ~ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+a436869257e5   nginx     "/docker-entrypoint.…"   14 seconds ago   Up 12 seconds   0.0.0.0:55001->80/tcp, :::55001->80/tcp   serene_hopper
+```
+
+Then run the command to see which host port is mapped to the container Port:
+
+```bash
+➜  ~ docker container port a436869257e5
+80/tcp -> 0.0.0.0:55001
+80/tcp -> :::55001
+```
+
+Therefore, if you want to access the nginx container from outside, namely curl the nginx container from the host terminal (not inside the docker user defined bridge), you need to specify the host port:
+
+```bash
+➜  ~ curl 0.0.0.0:55001
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
+
+#### Bind specific port
+
+You can also `publish` `container` `port` and `map` it to `host` `machine` with docker run:
+
+> docker run --name nginx_my_bridge --publish 5555:80 nginx
+
+![](../pics/containerized-Page-5.png)
+
+Important thing to keep in mind:
+
+If you access the container from outside you need to use the port mapped to the host machine.
+Nevertheless, if you want to access the container from the docker bridge or user defined bridge network, you need to specify the conainer port.
+
+Let's create a user defined bridge network called my_bridge, and deploy 2 containers:
+
+```bash
+docker network create -d bridge my_bridge
+docker run --name nodeutils_default_bridge pgolard/node-utils:v1 /bin/sh -c "sleep 50000;"
+docker network connect my_bridge nodeutils_default_bridge
+docker run --net=my_bridge --name nginx_my_bridge --publish 5555:80 nginx
+```
+
+Then connect to the user defined bridge network (by connecting to one container) and run a curl command to query the nginx container using port 80:
 
 
+```bash
+~ docker exec -it nodeutils_default_bridge bash
+root@fb0690600f0b:/# curl nginx_my_bridge:80
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
 
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
 
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@fb0690600f0b:/#
+```
 
-
-
-https://morioh.com/p/07e61c20c234
-https://docs.docker.com/engine/tutorials/networkingcontainers/
-https://www.oreilly.com/content/what-is-docker-networking/
-https://earthly.dev/blog/docker-networking/
-https://cloudkul.com/blog/understanding-communication-docker-containers/
-https://towardsdatascience.com/docker-networking-919461b7f498
